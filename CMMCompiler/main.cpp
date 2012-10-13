@@ -7,6 +7,14 @@
 //
 
 #include <iostream>
+#include <cstdio>
+#include <cstring>
+#include "general.h"
+
+
+
+FILE *inFile;           // inpu
+int lineno;             // line number
 
 int main(int argc, const char * argv[])
 {
