@@ -98,77 +98,10 @@ int lexOne() {
             return LexReturnType_OK;
         }
         else {                                          //punctuator
-            /*switch (elemCh) {
-             case '[':
-             
-             break;
-             case ']':
-             
-             break;
-             case '(':
-             
-             break;
-             case ')':
-             
-             break;
-             case '{':
-             
-             break;
-             case '}':
-             
-             break;
-             case '+':   //++
-             
-             break;
-             case '-':   //--
-             
-             break;
-             case '*':
-             
-             break;
-             case '/':
-             
-             break;
-             case '%':
-             
-             break;
-             case '<':
-             
-             break;
-             case '>':
-             
-             break;
-             case '=':
-             
-             break;
-             case '!':
-             
-             break;
-             case '&':
-             
-             break;
-             case '|':
-             
-             break;
-             case ';':
-             
-             break;
-             case ',':
-             
-             break;
-             case '#':
-             
-             break;
-             
-             default:
-             printf("ERROR: Wrong punctuator");
-             break;
-             }*/
-            
             lexBuff[buffIndex++] = elemCh;
             
             elemCh = fgetc(inFile);
-            if (elemCh == '+' || elemCh == '-') {
+            if (elemCh == '+' || elemCh == '-' || elemCh == '=') {
                 lexBuff[buffIndex++] = elemCh;
             }
             else {

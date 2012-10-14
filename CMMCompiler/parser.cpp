@@ -7,6 +7,8 @@
 //
 
 #include "parser.h"
+#include "util.h"
+#include "lalr.h"
 #include <stack>
 
 using namespace std;

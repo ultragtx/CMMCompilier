@@ -31,6 +31,7 @@ typedef enum {
     KeywordType_Main,
     KeywordType_Printf,
     KeywordType_Scanf,
+    KeywordType_For,
     KeywordType_PlaceHolder,
     
 }KeywordType;
@@ -50,6 +51,7 @@ const char * const KeyWords[NumOfKeywords] = {
     "main",
     "printf",
     "scanf",
+    "for",
 };
 
 typedef enum {
@@ -74,6 +76,11 @@ typedef enum {
     PunctuatorType_Semicolon,                           //;
     PunctuatorType_Comma,                               //,
     PunctuatorType_Well,                                //#
+    PunctuatorType_Euqal,                               //=
+    PunctuatorType_LE,                                  //<=
+    PunctuatorType_BE,                                  //>=
+    PunctuatorType_EE,                                  //==
+    PunctuatorType_NE,                                  //!=
     PunctuatorType_PlaceHolder,
     
 }PunctuatorType;
@@ -102,6 +109,11 @@ const char * const Punctuators[NumOfPunctuators] = {
     ";",
     ",",
     "#",
+    "=",
+    "<=",
+    ">=",
+    "==",
+    "!=",
 };
 
 typedef enum {
@@ -109,9 +121,85 @@ typedef enum {
     GeneralType_Constant,
     GeneralType_StringLiteral,
     GeneralType_PlaceHolder,
+    GeneralType_EOF,
 }GeneralType;
 
 extern FILE *inFile;           // inpu
 extern int lineno;             // line number
+
+typedef enum {
+    ES_Main = 1000,             //main
+    ES_LP,                      //(
+    ES_RP,                      //)
+    ES_Id,                      //identifier
+    ES_Const,                   //constant
+    ES_StrL,                    //string_literal
+    ES_LB,                      //[
+    ES_RB,                      //]
+    ES_PP,                      //++
+    ES_MM,                      //--
+    ES_Mul,                     //*
+    ES_Div,                     ///
+    ES_Add,                     //+
+    ES_Minu,                    //-
+    ES_Less,                    //<
+    ES_More,                    //>
+    ES_LE,                      //<=
+    ES_BE,                      //>=
+    ES_EE,                      //==
+    ES_NE,                      //!=
+    ES_Eq,                      //=
+    ES_Comm,                    //,
+    ES_Semi,                    //semi
+    ES_Int,                     //int
+    ES_Float,                   //float
+    ES_LLB,                     //{
+    ES_RLB,                     //}
+    ES_If,                      //if
+    ES_Else,                    //else
+    ES_For,                     //for
+    ES_Ret,                     //return
+    ES_Pri,                     //printf
+    ES_Sca,                     //scanf
+    ES_And,                     //&
+    ES_End,                     //$
+    ES_PlaceHolder,
+}EndingSymbol;
+
+typedef enum {
+    MS_Program = ES_PlaceHolder,
+    MS_Primary_Expression,
+    MS_Postfix_Expression,
+    MS_Multiplicative_Expression,
+    MS_Additive_Expression,
+    MS_Relational_Expression,
+    MS_Equality_Expression,
+    MS_Assignment_Expression,
+    MS_Assignment_Operator,
+    MS_Expression,
+    MS_Constant_Expression,
+    MS_Declaration,
+    MS_Declaration_Specifiers,
+    MS_Init_Declarator_List,
+    MS_Init_Declarator,
+    MS_Type_Specifier,
+    MS_Declarator,
+    MS_Direct_Declarator,
+    MS_Initializer,
+    MS_Initializer_List,
+    MS_Statement,
+    MS_Compound_Statement,
+    MS_Block_Item_List,
+    MS_Block_Item,
+    MS_Expression_Statement,
+    MS_Selection_Statement,
+    MS_Iteration_Statement,
+    MS_Jump_Statement,
+    MS_Printf_Statement,
+    MS_Printf_Params,
+    MS_Scanf_Statement,
+    MS_Scanf_Params,
+    MS_PlaceHolder,
+}MiddleSymbol;
 
 #endif
