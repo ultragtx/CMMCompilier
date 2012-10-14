@@ -1,0 +1,32 @@
+
+int main ( ) {
+	int id [ const ] = { const , const , const , const , const , const } semi
+	int id [ const ] = { const , const , const , const , const , const } semi
+	int id semi
+	float id , id semi
+	int id semi
+	int id semi
+
+	printf ( str_l ) semi
+	scanf ( str_l , & id ) semi
+
+	id = const semi
+	id = const semi
+	for ( id = const semi id < const semi id ++ )
+	{
+		id = id + id [ id ] * id [ id ] semi
+		id = id + id [ id ] semi
+	}
+	id = id / id semi
+
+	if ( id >= const ) {
+		id = id - const semi
+		printf ( str_l , id , id ) semi
+	}
+	else {
+		id = const - id semi
+		printf ( str_l , id , id ) semi
+	}
+	return const semi
+}
+

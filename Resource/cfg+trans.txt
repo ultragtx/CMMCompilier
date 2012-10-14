@@ -1,0 +1,154 @@
+[nonterminal]
+	program primary_expression postfix_expression multiplicative_expression additive_expression
+	relational_expression equality_expression assignment_expression assignment_operator
+	expression constant_expression declaration declaration_specifiers init_declarator_list
+	init_declarator type_specifier declarator direct_declarator initializer initializer_list statement
+	compound_statement block_item_list block_item expression_statement selection_statement
+	iteration_statement jump_statement  printf_statement printf_params scanf_statement scanf_params
+[terminal]
+	main ( ) identifier constant string_literal [ ] ++ -- * / + - < > <= >= == != = ,
+	semi int float { } if else for return printf scanf &
+[start]
+	program'
+[production]
+
+// Main
+	program' => program ;
+	program => type_specifier main ( ) compound_statement ;
+
+// Expressions
+
+	primary_expression =>
+			identifier |	{primary_expression.}
+			constant |
+			string_literal |
+			( expression ) ;
+		
+	postfix_expression =>
+			primary_expression |
+			postfix_expression [ expression ] |
+			postfix_expression ++ |
+			postfix_expression -- ;
+		
+
+	multiplicative_expression =>
+			postfix_expression |
+			multiplicative_expression * postfix_expression |
+			multiplicative_expression / postfix_expression ;
+		
+	additive_expression =>
+			multiplicative_expression |
+			additive_expression + multiplicative_expression |
+			additive_expression - multiplicative_expression ;
+		
+	relational_expression =>
+			additive_expression |
+			relational_expression < additive_expression |
+			relational_expression > additive_expression |
+			relational_expression <= additive_expression |
+			relational_expression >= additive_expression ;
+		
+	equality_expression =>
+			relational_expression |
+			equality_expression == relational_expression |
+			equality_expression != relational_expression ;
+		
+	assignment_expression =>
+			equality_expression |
+			postfix_expression assignment_operator assignment_expression ;
+		
+	assignment_operator =>
+			= ;
+		
+	expression =>
+			assignment_expression |
+			expression , assignment_expression ;
+		
+	constant_expression =>
+			equality_expression ;
+		
+// Declarations
+
+	declaration =>
+			declaration_specifiers init_declarator_list semi ;	// here is a semi
+		
+	declaration_specifiers =>
+			type_specifier ; {declaration_specifiers.type = type_specifier.type; declaration_specifiers.width = type_specifier.width}
+		
+	init_declarator_list =>
+			init_declarator |
+			init_declarator_list , init_declarator ;
+		
+	init_declarator =>
+			declarator |
+			declarator = initializer ;
+		
+	type_specifier =>
+			int | {type_specifier.type = int; type_specifier.width = 4}
+			float ; {type_specifier.type = int; type_specifier.width = 4}
+		
+	declarator =>
+			direct_declarator ;
+		
+	direct_declarator =>
+			identifier |
+			direct_declarator [ assignment_expression ] ;
+		
+	initializer =>
+			assignment_expression |
+			{ initializer_list } ;
+		
+	initializer_list =>
+			initializer |
+			initializer_list , initializer ;	// initializer may change to assignment_expression
+		
+// Statements
+
+	statement =>
+			compound_statement |
+			expression_statement |
+			selection_statement |
+			iteration_statement |
+			jump_statement ;
+		
+	compound_statement =>
+			{ block_item_list } ;
+		
+	block_item_list =>
+			block_item |
+			block_item_list block_item ;
+		
+	block_item =>
+			declaration |
+			statement ;
+		
+	expression_statement =>
+			printf_statement semi |
+			scanf_statement semi |
+			expression semi ;		// here is a semi
+		
+	selection_statement =>
+			//if ( expression ) statement |
+			if ( expression ) statement else statement ;
+		
+	iteration_statement =>
+			for ( expression semi expression semi expression ) statement ; // here are 2 semi
+			
+	jump_statement =>
+			return expression semi ;	// here is a semi
+			
+// Printf/Scanf
+
+	printf_statement =>
+			printf ( printf_params ) ;
+			
+	printf_params =>
+			string_literal |
+			printf_params , identifier ;
+		
+	scanf_statement =>
+			scanf ( scanf_params ) ;
+	
+	scanf_params =>
+			string_literal |
+			scanf_params , & identifier ;

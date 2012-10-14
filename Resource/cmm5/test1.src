@@ -1,0 +1,32 @@
+
+int main ( ) {
+	int identifier [ constant ] = { constant , constant , constant , constant , constant , constant } semi
+	int identifier [ constant ] = { constant , constant , constant , constant , constant , constant } semi
+	int identifier semi
+	float identifier , identifier semi
+	int identifier semi
+	int identifier semi
+
+	printf ( string_literal ) semi
+	scanf ( string_literal , & identifier ) semi
+
+	identifier = constant semi
+	identifier = constant semi
+	for ( identifier = constant semi identifier < constant semi identifier ++ )
+	{
+		identifier = identifier + identifier [ identifier ] * identifier [ identifier ] semi
+		identifier = identifier + identifier [ identifier ] semi
+	}
+	identifier = identifier / identifier semi
+
+	if ( identifier >= constant ) {
+		identifier = identifier - constant semi
+		printf ( string_literal , identifier , identifier ) semi
+	}
+	else {
+		identifier = constant - identifier semi
+		printf ( string_literal , identifier , identifier ) semi
+	}
+	return constant semi
+}
+

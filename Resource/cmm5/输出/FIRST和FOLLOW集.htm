@@ -1,0 +1,180 @@
+<html>
+<head>
+<title>FIRST/FOLLOW集</title>
+</head>
+<body>
+<p align="center">FIRST/FOLLOW集</p>
+<table border="1">
+<tr>
+<td nowrap>非终结符</td>
+<td nowrap>FIRST</td>
+<td nowrap>FOLLOW</td>
+</tr>
+<tr>
+<td nowrap>program'</td>
+<td nowrap>int&nbsp;float</td>
+<td nowrap>$</td>
+</tr>
+<tr>
+<td nowrap>program</td>
+<td nowrap>int&nbsp;float</td>
+<td nowrap>$</td>
+</tr>
+<tr>
+<td nowrap>primary_expression</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(</td>
+<td nowrap>[&nbsp;++&nbsp;--&nbsp;*&nbsp;/&nbsp;=&nbsp;+&nbsp;-&nbsp;<&nbsp;>&nbsp;<=&nbsp;>=&nbsp;==&nbsp;!=&nbsp;)&nbsp;]&nbsp;,&nbsp;semi&nbsp;}</td>
+</tr>
+<tr>
+<td nowrap>postfix_expression</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(</td>
+<td nowrap>[&nbsp;++&nbsp;--&nbsp;*&nbsp;/&nbsp;=&nbsp;+&nbsp;-&nbsp;<&nbsp;>&nbsp;<=&nbsp;>=&nbsp;==&nbsp;!=&nbsp;)&nbsp;]&nbsp;,&nbsp;semi&nbsp;}</td>
+</tr>
+<tr>
+<td nowrap>multiplicative_expression</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(</td>
+<td nowrap>*&nbsp;/&nbsp;+&nbsp;-&nbsp;<&nbsp;>&nbsp;<=&nbsp;>=&nbsp;==&nbsp;!=&nbsp;)&nbsp;]&nbsp;,&nbsp;semi&nbsp;}</td>
+</tr>
+<tr>
+<td nowrap>additive_expression</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(</td>
+<td nowrap>+&nbsp;-&nbsp;<&nbsp;>&nbsp;<=&nbsp;>=&nbsp;==&nbsp;!=&nbsp;)&nbsp;]&nbsp;,&nbsp;semi&nbsp;}</td>
+</tr>
+<tr>
+<td nowrap>relational_expression</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(</td>
+<td nowrap><&nbsp;>&nbsp;<=&nbsp;>=&nbsp;==&nbsp;!=&nbsp;)&nbsp;]&nbsp;,&nbsp;semi&nbsp;}</td>
+</tr>
+<tr>
+<td nowrap>equality_expression</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(</td>
+<td nowrap>==&nbsp;!=&nbsp;)&nbsp;]&nbsp;,&nbsp;semi&nbsp;}</td>
+</tr>
+<tr>
+<td nowrap>assignment_expression</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(</td>
+<td nowrap>)&nbsp;]&nbsp;,&nbsp;semi&nbsp;}</td>
+</tr>
+<tr>
+<td nowrap>assignment_operator</td>
+<td nowrap>=</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(</td>
+</tr>
+<tr>
+<td nowrap>expression</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(</td>
+<td nowrap>)&nbsp;]&nbsp;,&nbsp;semi</td>
+</tr>
+<tr>
+<td nowrap>constant_expression</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(</td>
+<td nowrap>&nbsp;</td>
+</tr>
+<tr>
+<td nowrap>declaration</td>
+<td nowrap>int&nbsp;float</td>
+<td nowrap>}&nbsp;{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;int&nbsp;float&nbsp;printf&nbsp;scanf</td>
+</tr>
+<tr>
+<td nowrap>declaration_specifiers</td>
+<td nowrap>int&nbsp;float</td>
+<td nowrap>identifier</td>
+</tr>
+<tr>
+<td nowrap>init_declarator_list</td>
+<td nowrap>identifier</td>
+<td nowrap>semi&nbsp;,</td>
+</tr>
+<tr>
+<td nowrap>init_declarator</td>
+<td nowrap>identifier</td>
+<td nowrap>semi&nbsp;,</td>
+</tr>
+<tr>
+<td nowrap>type_specifier</td>
+<td nowrap>int&nbsp;float</td>
+<td nowrap>main&nbsp;identifier</td>
+</tr>
+<tr>
+<td nowrap>declarator</td>
+<td nowrap>identifier</td>
+<td nowrap>semi&nbsp;,&nbsp;=</td>
+</tr>
+<tr>
+<td nowrap>direct_declarator</td>
+<td nowrap>identifier</td>
+<td nowrap>semi&nbsp;,&nbsp;=&nbsp;[</td>
+</tr>
+<tr>
+<td nowrap>initializer</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;{</td>
+<td nowrap>semi&nbsp;,&nbsp;}</td>
+</tr>
+<tr>
+<td nowrap>initializer_list</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;{</td>
+<td nowrap>}&nbsp;,</td>
+</tr>
+<tr>
+<td nowrap>statement</td>
+<td nowrap>{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;printf&nbsp;scanf</td>
+<td nowrap>}&nbsp;{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;int&nbsp;float&nbsp;printf&nbsp;scanf&nbsp;else</td>
+</tr>
+<tr>
+<td nowrap>compound_statement</td>
+<td nowrap>{</td>
+<td nowrap>$&nbsp;}&nbsp;{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;int&nbsp;float&nbsp;printf&nbsp;scanf&nbsp;else</td>
+</tr>
+<tr>
+<td nowrap>block_item_list</td>
+<td nowrap>{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;int&nbsp;float&nbsp;printf&nbsp;scanf</td>
+<td nowrap>}&nbsp;{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;int&nbsp;float&nbsp;printf&nbsp;scanf</td>
+</tr>
+<tr>
+<td nowrap>block_item</td>
+<td nowrap>{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;int&nbsp;float&nbsp;printf&nbsp;scanf</td>
+<td nowrap>}&nbsp;{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;int&nbsp;float&nbsp;printf&nbsp;scanf</td>
+</tr>
+<tr>
+<td nowrap>expression_statement</td>
+<td nowrap>identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;printf&nbsp;scanf</td>
+<td nowrap>}&nbsp;{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;int&nbsp;float&nbsp;printf&nbsp;scanf&nbsp;else</td>
+</tr>
+<tr>
+<td nowrap>selection_statement</td>
+<td nowrap>if</td>
+<td nowrap>}&nbsp;{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;int&nbsp;float&nbsp;printf&nbsp;scanf&nbsp;else</td>
+</tr>
+<tr>
+<td nowrap>iteration_statement</td>
+<td nowrap>for</td>
+<td nowrap>}&nbsp;{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;int&nbsp;float&nbsp;printf&nbsp;scanf&nbsp;else</td>
+</tr>
+<tr>
+<td nowrap>jump_statement</td>
+<td nowrap>return</td>
+<td nowrap>}&nbsp;{&nbsp;identifier&nbsp;constant&nbsp;string_literal&nbsp;(&nbsp;if&nbsp;for&nbsp;return&nbsp;int&nbsp;float&nbsp;printf&nbsp;scanf&nbsp;else</td>
+</tr>
+<tr>
+<td nowrap>printf_statement</td>
+<td nowrap>printf</td>
+<td nowrap>semi</td>
+</tr>
+<tr>
+<td nowrap>printf_params</td>
+<td nowrap>string_literal</td>
+<td nowrap>)&nbsp;,</td>
+</tr>
+<tr>
+<td nowrap>scanf_statement</td>
+<td nowrap>scanf</td>
+<td nowrap>semi</td>
+</tr>
+<tr>
+<td nowrap>scanf_params</td>
+<td nowrap>string_literal</td>
+<td nowrap>)&nbsp;,</td>
+</tr>
+</table>
+</body>
+</html>

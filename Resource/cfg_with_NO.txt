@@ -1,0 +1,140 @@
+// Main
+0	program' => program ;
+1	program => type_specifier main ( ) compound_statement ;
+
+// Expressions
+
+	primary_expression =>
+2			identifier |
+3			constant |
+4			string_literal |
+5			( expression ) ;
+		
+	postfix_expression =>
+6			primary_expression |
+7			postfix_expression [ expression ] |
+8			postfix_expression ++ |
+9			postfix_expression -- ;
+10		
+
+	multiplicative_expression =>
+11			postfix_expression |
+12			multiplicative_expression * postfix_expression |
+13			multiplicative_expression / postfix_expression ;
+		
+	additive_expression =>
+14			multiplicative_expression |
+15			additive_expression + multiplicative_expression |
+16			additive_expression - multiplicative_expression ;
+		
+	relational_expression =>
+17			additive_expression |
+18			relational_expression < additive_expression |
+19			relational_expression > additive_expression |
+20			relational_expression <= additive_expression |
+21			relational_expression >= additive_expression ;
+		
+	equality_expression =>
+22			relational_expression |
+23			equality_expression == relational_expression |
+24			equality_expression != relational_expression ;
+		
+	assignment_expression =>
+25			equality_expression |
+26			postfix_expression assignment_operator assignment_expression ;
+		
+	assignment_operator =>
+27			= ;
+		
+	expression =>
+28			assignment_expression |
+29			expression , assignment_expression ;
+		
+	constant_expression =>
+30			equality_expression ;
+		
+// Declarations
+
+	declaration =>
+31			declaration_specifiers init_declarator_list semi ;	// here is a semi
+		
+	declaration_specifiers =>
+32			type_specifier ;
+		
+	init_declarator_list =>
+33			init_declarator |
+34			init_declarator_list , init_declarator ;
+		
+	init_declarator =>
+35			declarator |
+36			declarator = initializer ;
+		
+	type_specifier =>
+37			int |
+38			float ;
+		
+	declarator =>
+39			direct_declarator ;
+		
+	direct_declarator =>
+40			identifier |
+41			direct_declarator [ assignment_expression ] ;
+		
+	initializer =>
+42			assignment_expression |
+43			{ initializer_list } ;
+		
+	initializer_list =>
+44			initializer |
+45			initializer_list , initializer ;	// initializer may change to assignment_expression
+		
+// Statements
+
+	statement =>
+46			compound_statement |
+47			expression_statement |
+48			selection_statement |
+49			iteration_statement |
+50			jump_statement ;
+		
+	compound_statement =>
+51			{ block_item_list } ;
+		
+	block_item_list =>
+52			block_item |
+53			block_item_list block_item ;
+		
+	block_item =>
+54			declaration |
+55			statement ;
+		
+	expression_statement =>
+56			printf_statement semi |
+57			scanf_statement semi |
+58			expression semi ;		// here is a semi
+		
+	selection_statement =>
+59			//if ( expression ) statement |
+60			if ( expression ) statement else statement ;
+		
+	iteration_statement =>
+61			for ( expression semi expression semi expression ) statement ; // here are 2 semi
+			
+	jump_statement =>
+62			return expression semi ;	// here is a semi
+			
+// Printf/Scanf
+
+	printf_statement =>
+63			printf ( printf_params ) ;
+			
+	printf_params =>
+64			string_literal |
+65			printf_params , identifier ;
+		
+	scanf_statement =>
+66			scanf ( scanf_params ) ;
+	
+	scanf_params =>
+67			string_literal |
+68			scanf_params , & identifier ;

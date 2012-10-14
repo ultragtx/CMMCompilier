@@ -1,0 +1,154 @@
+[nonterminal]
+	prog pri_exp pos_exp mul_exp add_exp
+	rel_exp equ_exp ass_exp ass_op
+	exp con_exp decn dec_spe i_d_l
+	ini_dec typ_spe decr dir_dec ini ini_lis sta
+	com_sta b_i_l blo_ite exp_sta sel_sta
+	ite_sta jum_sta  pri_sta pri_par sca_sta sca_par
+[terminal]
+	main ( ) id const str_l [ ] ++ -- * / + - < > <= >= == != = ,
+	semi int float { } if else for return printf scanf &
+[start]
+	prog'
+[production]
+
+// Main
+	prog' => prog ;
+	prog => typ_spe main ( ) com_sta ;
+
+// Expressions
+
+	pri_exp =>
+			id |
+			const |
+			str_l |
+			( exp ) ;
+		
+	pos_exp =>
+			pri_exp |
+			pos_exp [ exp ] |
+			pos_exp ++ |
+			pos_exp -- ;
+		
+
+	mul_exp =>
+			pos_exp |
+			mul_exp * pos_exp |
+			mul_exp / pos_exp ;
+		
+	add_exp =>
+			mul_exp |
+			add_exp + mul_exp |
+			add_exp - mul_exp ;
+		
+	rel_exp =>
+			add_exp |
+			rel_exp < add_exp |
+			rel_exp > add_exp |
+			rel_exp <= add_exp |
+			rel_exp >= add_exp ;
+		
+	equ_exp =>
+			rel_exp |
+			equ_exp == rel_exp |
+			equ_exp != rel_exp ;
+		
+	ass_exp =>
+			equ_exp |
+			pos_exp ass_op ass_exp ;
+		
+	ass_op =>
+			= ;
+		
+	exp =>
+			ass_exp |
+			exp , ass_exp ;
+		
+	con_exp =>
+			equ_exp ;
+		
+// Declarations
+
+	decn =>
+			dec_spe i_d_l semi ;	// here is a semi
+		
+	dec_spe =>
+			typ_spe ;
+		
+	i_d_l =>
+			ini_dec |
+			i_d_l , ini_dec ;
+		
+	ini_dec =>
+			decr |
+			decr = ini ;
+		
+	typ_spe =>
+			int |
+			float ;
+		
+	decr =>
+			dir_dec ;
+		
+	dir_dec =>
+			id |
+			dir_dec [ ass_exp ] ;
+		
+	ini =>
+			ass_exp |
+			{ ini_lis } ;
+		
+	ini_lis =>
+			ini |
+			ini_lis , ini ;	// ini may change to ass_exp
+		
+// Statements
+
+	sta =>
+			com_sta |
+			exp_sta |
+			sel_sta |
+			ite_sta |
+			jum_sta ;
+		
+	com_sta =>
+			{ b_i_l } ;
+		
+	b_i_l =>
+			blo_ite |
+			b_i_l blo_ite ;
+		
+	blo_ite =>
+			decn |
+			sta ;
+		
+	exp_sta =>
+			pri_sta semi |
+			sca_sta semi |
+			exp semi ;		// here is a semi
+		
+	sel_sta =>
+			//if ( exp ) sta |
+			if ( exp ) sta else sta ;
+		
+	ite_sta =>
+			for ( exp semi exp semi exp ) sta ; // here are 2 semi
+			
+	jum_sta =>
+			return exp semi ;	// here is a semi
+			
+// Printf/Scanf
+
+	pri_sta =>
+			printf ( pri_par ) ;
+			
+	pri_par =>
+			str_l |
+			pri_par , id ;
+		
+	sca_sta =>
+			scanf ( sca_par ) ;
+	
+	sca_par =>
+			str_l |
+			sca_par , & id ;

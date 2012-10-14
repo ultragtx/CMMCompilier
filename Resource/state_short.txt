@@ -1,0 +1,37 @@
+primary_expression					pri_exp	
+postfix_expression					pos_exp			
+multiplicative_expression 			mul_exp
+additive_expression					add_exp
+relational_expression 				rel_exp
+equality_expression 				equ_exp
+assignment_expression 				ass_exp
+assignment_operator					ass_op
+constant_expression 				con_exp
+declaration_specifiers 				dec_spe
+init_declarator_list				i_d_l
+init_declarator 					ini_dec
+type_specifier 						typ_spe
+direct_declarator 					dir_dec
+initializer_list 					ini_lis
+compound_statement 					com_sta
+block_item_list 					b_i_l
+block_item 							blo_ite
+expression_statement 				exp_sta
+selection_statement					sel_sta
+iteration_statement 				ite_sta
+jump_statement  					jum_sta
+printf_statement 					pri_sta
+printf_params 						pri_par
+scanf_statement						sca_sta
+scanf_params						sca_par
+expression 							exp
+declaration 						decn
+declarator 							decr
+initializer 						ini
+statement							sta
+program								prog
+
+
+identifier							id
+constant							const
+string_literal						str_l
