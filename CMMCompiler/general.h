@@ -91,7 +91,7 @@ const char * const Punctuators[NumOfPunctuators] = {
     "[",
     "]",
     "(",
-    "(",
+    ")",
     "{",
     "}",
     "++",
@@ -166,6 +166,8 @@ typedef enum {
     ES_PlaceHolder,
 }EndingSymbol;
 
+const int NumOfEndingSymbol = ES_PlaceHolder - ES_Main;
+
 typedef enum {
     MS_Program = ES_PlaceHolder,
     MS_Primary_Expression,
@@ -201,5 +203,7 @@ typedef enum {
     MS_Scanf_Params,
     MS_PlaceHolder,
 }MiddleSymbol;
+
+const int NumOfMiddleSymbol = MS_PlaceHolder - MS_Program;
 
 #endif

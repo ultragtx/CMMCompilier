@@ -12,4 +12,6 @@
 #include <iostream>
 #include "general.h"
 
+int parse();
+
 #endif /* defined(__CMMCompiler__parser__) */

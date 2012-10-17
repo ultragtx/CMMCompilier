@@ -7,8 +7,14 @@
 //
 
 #include "lexer.h"
+#include "symbol.h"
 
 char lexBuff[LEX_BUFF_SIZE];
+
+void debugPrint(const char *str) {
+    //printf("|%s| ", str);
+    //fflush(stdout);
+}
 
 int typeOfWord(char *word) {
     for (int i = 0; i < NumOfKeywords; i++) {
@@ -19,7 +25,7 @@ int typeOfWord(char *word) {
     return -1;
 }
 
-int lexOne() {
+int lexOne(int *type, int *intValue, char **strValue) {
     char elemCh;
     int buffIndex;
     
@@ -31,8 +37,12 @@ int lexOne() {
         }
         else if (elemCh == '\n') {                      //new line
             lineno++;
+            debugPrint("\n");
+            //printf("\n");
         }
         else if (elemCh == EOF) {                       //end of file
+            *type = GeneralType_EOF;
+            debugPrint("EOF");
             return LexReturnType_EOF;
         }
         else if (isdigit(elemCh) || elemCh == '.') {    //number constant
@@ -53,11 +63,16 @@ int lexOne() {
             if (dotCount) {     //float or double
                 double doubleConst = atof(lexBuff);
                 // TODO: get double constant
+                printf("Float number [%lf] should not appear!", doubleConst);
                 return LexReturnType_OK;
             }
             else {              //integer
                 int intConst = atoi(lexBuff);
                 // TODO: get int constant
+                *type = GeneralType_Constant;
+                *intValue = intConst;
+                //debugPrint("constant");
+                debugPrint(lexBuff);
                 return LexReturnType_OK;
             }
         }
@@ -73,11 +88,16 @@ int lexOne() {
             }
             
             // TODO: keyword or identifier
-            if (typeOfWord(lexBuff) != -1) {    // keyword
-                
+            
+            if ((*type = typeOfWord(lexBuff)) != -1) {    // keyword
+                //debugPrint("Keyword");
+                debugPrint(lexBuff);
             }
             else {                              // identifier
-                printf("identifier ");
+                *type = GeneralType_Identifier;
+                *intValue = lookup(lexBuff) || insert(lexBuff, GeneralType_Identifier);
+                //debugPrint("identifier");
+                debugPrint(lexBuff);
             }
             
             return LexReturnType_OK;
@@ -92,9 +112,17 @@ int lexOne() {
                     break;
                 }
             }
+            lexBuff[buffIndex] = '\0';
             
-            // TODO: string literal
+            *type = GeneralType_StringLiteral;
             
+            size_t size = strlen(lexBuff) + 1;
+            char *strl = (char *)malloc(size);
+            memcpy(strl, lexBuff, size);
+            strl[size - 1] = '\0';
+            *strValue = strl;
+            //debugPrint("string_literal");
+            debugPrint(lexBuff);
             return LexReturnType_OK;
         }
         else {                                          //punctuator
@@ -114,12 +142,15 @@ int lexOne() {
                 if (!strcmp(lexBuff, Punctuators[i])) {
                     int puncType = PunctuatorType_LBracket + i;
                     // TODO: return puncType
-                    
+                    *type = puncType;
+                    //debugPrint("punctuator");
+                    debugPrint(lexBuff);
+                    return LexReturnType_OK;
                 }
             }
         }
         
     }
     
-    return 0;
+    return LexReturnType_OK;
 }

@@ -12,4 +12,6 @@
 #include <iostream>
 #include "general.h"
 
+int lexOne(int *type, int *intValue, char **strValue);
+
 #endif /* defined(__CMMCompiler__lexer__) */

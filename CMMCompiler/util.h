@@ -12,6 +12,7 @@
 #include <iostream>
 #include "general.h"
 
-EndingSymbol l2E(int lexSymbol);
+EndingSymbol l2e(int lexSymbol);
+void error(const char *m);
 
 #endif /* defined(__CMMCompiler__util__) */

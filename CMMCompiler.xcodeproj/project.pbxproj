@@ -12,6 +12,7 @@
 		C1A0BA701629532E008B0F19 /* lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A0BA6E1629532E008B0F19 /* lexer.cpp */; };
 		C1A0BA73162956A7008B0F19 /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A0BA71162956A7008B0F19 /* parser.cpp */; };
 		C1A0BA7616296A8A008B0F19 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A0BA7416296A8A008B0F19 /* util.cpp */; };
+		C1A0BA8D162BAAF3008B0F19 /* symbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A0BA8B162BAAF2008B0F19 /* symbol.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,6 +40,8 @@
 		C1A0BA7416296A8A008B0F19 /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = util.cpp; sourceTree = "<group>"; };
 		C1A0BA7516296A8A008B0F19 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
 		C1A0BA86162A9CB1008B0F19 /* lalr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lalr.h; sourceTree = "<group>"; };
+		C1A0BA8B162BAAF2008B0F19 /* symbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = symbol.cpp; sourceTree = "<group>"; };
+		C1A0BA8C162BAAF3008B0F19 /* symbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = symbol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +80,8 @@
 				C1A0BA72162956A7008B0F19 /* parser.h */,
 				C1A0BA6E1629532E008B0F19 /* lexer.cpp */,
 				C1A0BA6F1629532E008B0F19 /* lexer.h */,
+				C1A0BA8B162BAAF2008B0F19 /* symbol.cpp */,
+				C1A0BA8C162BAAF3008B0F19 /* symbol.h */,
 				C1A0BA6D162951F0008B0F19 /* general.h */,
 				C1A0BA6616295181008B0F19 /* CMMCompiler.1 */,
 				C1A0BA7416296A8A008B0F19 /* util.cpp */,
@@ -140,6 +145,7 @@
 				C1A0BA701629532E008B0F19 /* lexer.cpp in Sources */,
 				C1A0BA73162956A7008B0F19 /* parser.cpp in Sources */,
 				C1A0BA7616296A8A008B0F19 /* util.cpp in Sources */,
+				C1A0BA8D162BAAF3008B0F19 /* symbol.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +238,7 @@
 				C1A0BA6C16295181008B0F19 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -8,7 +8,7 @@
 
 #include "util.h"
 
-EndingSymbol l2E(int lexSymbol) {       //lex symbol to ending symbol
+EndingSymbol l2e(int lexSymbol) {       //lex symbol to ending symbol
     EndingSymbol result = ES_PlaceHolder;
     
     switch (lexSymbol) {
@@ -123,4 +123,10 @@ EndingSymbol l2E(int lexSymbol) {       //lex symbol to ending symbol
     }
     
     return result;
+}
+
+void error(const char *m) {
+    //fprintf(stderr, "line %d: %s\n", lineno, m);
+    printf("[ERROR]:line %d: %s\n", lineno, m);
+    exit(1);
 }
