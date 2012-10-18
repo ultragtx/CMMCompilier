@@ -448,16 +448,14 @@ void reduce31(int action) {		//    "declaration => declaration_specifiers init_d
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     int typeSize = elems[0]->intValue;
     
-    ParserElem *next = elems[1]->firstChild;
+    translate_init_declarator_list(elems[1], typeSize);
+    
+    /*ParserElem *next = elems[1]->firstChild;
     
     ParserElem *declarator = next->firstChild;
     
@@ -480,7 +478,7 @@ void reduce31(int action) {		//    "declaration => declaration_specifiers init_d
             
         }
         
-    }
+    }*/
     
     currentState = go;
     
@@ -536,11 +534,57 @@ void reduce33(int action) {		//    "init_declarator_list =>	 init_declarator ;",
 }
 
 void reduce34(int action) {		//    "init_declarator_list =>	 init_declarator_list , init_declarator ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    ParserElem *reduceElem = new ParserElem;
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    reduceElem->firstChild = elems[0];
+    
+    elems[0]->next = elems[2];
+    
+    delete elems[1];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce35(int action) {		//    "init_declarator => declarator ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    ParserElem *reduceElem = new ParserElem;
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    //    reduceElem->endingSymbol = elems[0]->endingSymbol;
+    //    reduceElem->intValue = elems[0]->intValue;
+    reduceElem->firstChild = elems[0];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce36(int action) {		//    "init_declarator => declarator = initializer ;",
@@ -733,8 +777,10 @@ void reduce43(int action) {		//    "initializer => { initializer_list } ;",
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = elems[1];
+    ParserElem *reduceElem = new ParserElem;
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+
+    reduceElem->firstChild = elems[1];
     
     delete elems[0];
     delete elems[2];

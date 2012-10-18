@@ -15,6 +15,8 @@
 
 void translate_initializer(ParserElem *initializer, int count, int typeSize);
 void translate_initializer_list(ParserElem *initializer, int typeSize);
+void translate_init_declarator(ParserElem *init_declarator, int typeSize);
+void translate_init_declarator_list(ParserElem *elem, int typeSize);
 
 void reduce00(int action);
 void reduce01(int action);
