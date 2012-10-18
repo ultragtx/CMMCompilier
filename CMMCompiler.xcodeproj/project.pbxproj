@@ -13,6 +13,7 @@
 		C1A0BA73162956A7008B0F19 /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A0BA71162956A7008B0F19 /* parser.cpp */; };
 		C1A0BA7616296A8A008B0F19 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A0BA7416296A8A008B0F19 /* util.cpp */; };
 		C1A0BA8D162BAAF3008B0F19 /* symbol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A0BA8B162BAAF2008B0F19 /* symbol.cpp */; };
+		C1A8C6E5162E8AC20023DABD /* translator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A8C6E3162E8AC20023DABD /* translator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +43,8 @@
 		C1A0BA86162A9CB1008B0F19 /* lalr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lalr.h; sourceTree = "<group>"; };
 		C1A0BA8B162BAAF2008B0F19 /* symbol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = symbol.cpp; sourceTree = "<group>"; };
 		C1A0BA8C162BAAF3008B0F19 /* symbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = symbol.h; sourceTree = "<group>"; };
+		C1A8C6E3162E8AC20023DABD /* translator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = translator.cpp; sourceTree = "<group>"; };
+		C1A8C6E4162E8AC20023DABD /* translator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = translator.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +81,8 @@
 				C1A0BA86162A9CB1008B0F19 /* lalr.h */,
 				C1A0BA71162956A7008B0F19 /* parser.cpp */,
 				C1A0BA72162956A7008B0F19 /* parser.h */,
+				C1A8C6E3162E8AC20023DABD /* translator.cpp */,
+				C1A8C6E4162E8AC20023DABD /* translator.h */,
 				C1A0BA6E1629532E008B0F19 /* lexer.cpp */,
 				C1A0BA6F1629532E008B0F19 /* lexer.h */,
 				C1A0BA8B162BAAF2008B0F19 /* symbol.cpp */,
@@ -146,6 +151,7 @@
 				C1A0BA73162956A7008B0F19 /* parser.cpp in Sources */,
 				C1A0BA7616296A8A008B0F19 /* util.cpp in Sources */,
 				C1A0BA8D162BAAF3008B0F19 /* symbol.cpp in Sources */,
+				C1A8C6E5162E8AC20023DABD /* translator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,7 +165,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -189,7 +195,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;

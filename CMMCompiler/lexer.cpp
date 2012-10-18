@@ -118,6 +118,9 @@ int lexOne(int *type, int *intValue, char **strValue) {
             
             size_t size = strlen(lexBuff) + 1;
             char *strl = (char *)malloc(size);
+            if (strl == NULL) {
+                printf("[ERROR]: malloc error for string_literal\n");
+            }
             memcpy(strl, lexBuff, size);
             strl[size - 1] = '\0';
             *strValue = strl;

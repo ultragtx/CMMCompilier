@@ -12,6 +12,8 @@
 #include <iostream>
 #include "general.h"
 
+extern int addrOffset;
+
 int parse();
 
 #endif /* defined(__CMMCompiler__parser__) */

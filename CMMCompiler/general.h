@@ -10,6 +10,7 @@
 #define CMMCompiler_general_h
 
 #include <iostream>
+#include <stack>
 
 #define LEX_BUFF_SIZE 128
 
@@ -205,5 +206,14 @@ typedef enum {
 }MiddleSymbol;
 
 const int NumOfMiddleSymbol = MS_PlaceHolder - MS_Program;
+
+struct ParserElem{
+    int symbol;
+    int endingSymbol = 0; // 0 for middle symbol without reduce
+    int intValue; // const value; size; symbol table index
+    char *strValue = NULL;
+    ParserElem *firstChild = NULL; // child
+    ParserElem *next = NULL; // brother
+};
 
 #endif

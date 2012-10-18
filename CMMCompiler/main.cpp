@@ -19,7 +19,21 @@ FILE *inFile;           // inpu
 int lineno;             // line number
 
 void init() {
-    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SourceCode.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SourceCode.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_1.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_2.c", "r+");
+    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_3.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_4.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_5.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_6.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_7.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_8.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_9.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_10.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_11.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_12.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_13.c", "r+");
+    
     if (inFile == NULL) {
         printf("[ERROR]: Can't open file!\n");
     }

@@ -20,7 +20,7 @@ typedef enum {
     AG_Accept = 9999,
 }ActionGoto;
 
-int ProductSource[NUM_PRODUCTION] = {
+const int ProductSource[NUM_PRODUCTION] = {
     -1,
     MS_Program,
     MS_Primary_Expression,
