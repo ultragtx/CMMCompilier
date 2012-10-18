@@ -96,8 +96,8 @@ int parse() {
             //cout << "step to " << action << endl;
         }
         else if (action >= AG_Reduce_Base && action < AG_Accept) {  // Reduce by A -> b
-//            reduceTable[action - AG_Reduce_Base](action);
-//            continue;
+            reduceTable[action - AG_Reduce_Base](action);
+            continue;
             
             int popCount = ProductCount[action - AG_Reduce_Base];
             while (popCount > 0) { // pop |b| times
@@ -203,12 +203,8 @@ void reduce03(int action) {		//    "primary_expression => constant ;",
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -238,12 +234,8 @@ void reduce06(int action) {		//    "postfix_expression => primary_expression ;",
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -281,12 +273,8 @@ void reduce11(int action) {		//    "multiplicative_expression => postfix_express
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -316,12 +304,8 @@ void reduce14(int action) {		//    "additive_expression => multiplicative_expres
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -351,12 +335,8 @@ void reduce17(int action) {		//    "relational_expression => additive_expression
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -394,12 +374,8 @@ void reduce22(int action) {		//    "equality_expression => relational_expression
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -429,12 +405,8 @@ void reduce25(int action) {		//    "assignment_expression => equality_expression
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -530,12 +502,8 @@ void reduce32(int action) {		//    "declaration_specifiers => type_specifier ;",
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -618,12 +586,9 @@ void reduce37(int action) {		//    "type_specifier => int ;",
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
     reduceElem->intValue = sizeof(int);
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -645,12 +610,9 @@ void reduce38(int action) {		//    "type_specifier => float ;",
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
     reduceElem->intValue = sizeof(float);
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -672,12 +634,8 @@ void reduce39(int action) {		//    "declarator => direct_declarator ;",
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -699,12 +657,8 @@ void reduce40(int action) {		//    "direct_declarator => identifier ;",
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     currentState = go;
     
@@ -727,14 +681,12 @@ void reduce41(int action) {		//    "direct_declarator => direct_declarator [ ass
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
     
     symtable[elems[0]->intValue].size = elems[2]->intValue; // translate
     
-    for (int i = 0; i < count; i++) {
+    for (int i = 1; i < count; i++) {
         delete elems[i];
     }
     
@@ -758,12 +710,8 @@ void reduce42(int action) {		//    "initializer => assignment_expression ;",
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->endingSymbol = elems[0]->endingSymbol;
-    reduceElem->intValue = elems[0]->intValue;
-    
-    delete elems[0];
     
     currentState = go;
     

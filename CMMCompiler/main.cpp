@@ -20,9 +20,9 @@ int lineno;             // line number
 
 void init() {
 //    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SourceCode.c", "r+");
-//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_1.c", "r+");
+    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_1.c", "r+");
 //    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_2.c", "r+");
-    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_3.c", "r+");
+//    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_3.c", "r+");
 //    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_4.c", "r+");
 //    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_5.c", "r+");
 //    inFile = fopen("/Users/ultragtx/Desktop/Software4/CMMCompiler/Resource/SorceCodePart/SourceCode_6.c", "r+");
