@@ -4,6 +4,6 @@ int main(){
 	float mean, sum;
 	int i;
 	i = 0;
-         sum = sum + score[i] * credit[i];
-    
+    sum = sum + score[i] * credit[i];
+    sum = sum + credit[i];
 }

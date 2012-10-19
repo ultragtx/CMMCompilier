@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <stack>
+#include <string>
 
 #define LEX_BUFF_SIZE 128
 
@@ -211,7 +212,10 @@ struct ParserElem{
     int symbol;
     int endingSymbol = 0; // 0 for middle symbol without reduce
     int intValue; // const value; size; symbol table index
-    char *strValue = NULL;
+    char *strValue = NULL; // str_literal
+    
+    std::string code;
+    
     ParserElem *firstChild = NULL; // child
     ParserElem *next = NULL; // brother
 };

@@ -10,15 +10,50 @@
 #include "parser.h"
 #include "symbol.h"
 #include <stack>
+#include <string>
+
+#define MAX_BUFFER 100
 
 using namespace std;
+
+stack<ParserElem*> codeCollectorStack;
+
+void registerCodeCollector(ParserElem *elem) {
+    codeCollectorStack.push(elem);
+}
+
+void genCode(const char *fmt, ...) {
+    char textString[MAX_BUFFER] = {'\0'};
+    
+    va_list args;
+    va_start ( args, fmt );
+    vsnprintf ( textString, MAX_BUFFER, fmt, args );
+    va_end ( args );
+    string retStr = textString;
+    
+    ParserElem *currentCollector = codeCollectorStack.top();
+    
+    (currentCollector->code).append(retStr);
+}
+
+void submitCode(string code) {
+    ParserElem *currentCollector = codeCollectorStack.top();
+    
+    (currentCollector->code).append(code);
+}
+
+void unregisterCodeCollector(ParserElem *elem) {
+    codeCollectorStack.pop();
+}
 
 void translate_initializer(ParserElem *initializer, int count, int typeSize) { // actually assignment
 
     switch (initializer->endingSymbol) {
         case ES_Const:
-            printf("[GENCODE]: movl $%d, %%edx\n", count);
-            printf("[GENCODE]: movl $%d, %d(%%ebp, %%edx, %d)\n", initializer->intValue, -addrOffset, typeSize);
+            //printf("[GENCODE]: movl $%d, %%edx\n", count);
+            //printf("[GENCODE]: movl $%d, %d(%%ebp, %%edx, %d)\n", initializer->intValue, -addrOffset, typeSize);
+            genCode("[GENCODE]: movl $%d, %%edx\n", count);
+            genCode("[GENCODE]: movl $%d, %d(%%ebp, %%edx, %d)\n", initializer->intValue, -addrOffset, typeSize);
             break;
             
         default:
@@ -31,6 +66,8 @@ void translate_initializer(ParserElem *initializer, int count, int typeSize) { /
 void translate_initializer_list(ParserElem *elem, int typeSize) {
     
     ParserElem *initializer_list = elem;
+    //registerCodeCollector(elem);
+    
     stack<ParserElem*> s;
     
     int symbol = initializer_list->symbol;
@@ -49,6 +86,9 @@ void translate_initializer_list(ParserElem *elem, int typeSize) {
         translate_initializer(initializer_list->next, count++, typeSize);
         s.pop();
     }
+    
+    //unregisterCodeCollector(elem);
+    //submitCode(elem->code);
 }
 
 void translate_init_declarator(ParserElem *init_declarator, int typeSize) {
@@ -61,7 +101,8 @@ void translate_init_declarator(ParserElem *init_declarator, int typeSize) {
     addrOffset += realSize;
     symtable[declarator->intValue].addr = addrOffset;
     
-    printf("[GENCODE]: subl $%d, %%esp\n", realSize);
+    //printf("[GENCODE]: subl $%d, %%esp\n", realSize);
+    genCode("[GENCODE]: subl $%d, %%esp\n", realSize);
     ParserElem *initializer = declarator->next;
     if (initializer != NULL) { // declarator = initializer
         if (initializer->endingSymbol == 0) { // { initializer_list }
@@ -70,12 +111,12 @@ void translate_init_declarator(ParserElem *init_declarator, int typeSize) {
         else { // assignment_expression
             translate_initializer(initializer, 0, typeSize);
         }
-        
     }
 }
 
 void translate_init_declarator_list(ParserElem *elem, int typeSize) {
     ParserElem *init_declarator_list = elem;
+    registerCodeCollector(elem);
     stack<ParserElem*> s;
     
     int symbol = init_declarator_list->symbol;
@@ -92,5 +133,43 @@ void translate_init_declarator_list(ParserElem *elem, int typeSize) {
         translate_init_declarator(init_declarator_list->next, typeSize);
         s.pop();
     }
-    
+    unregisterCodeCollector(elem);
 }
+
+void translate_assignment_expression(ParserElem *elem) {
+    ParserElem *assignment_expression = elem;
+    ParserElem *postfix_expression = elem->firstChild;
+    ParserElem *assignment_exp = postfix_expression->next;
+    
+    if (postfix_expression->endingSymbol != 0) { // id or maybe etc, assume id only
+        int addr = symtable[postfix_expression->intValue].addr;
+    }
+    else { //  id[const] or etc
+        printf("[WARNING]: translate_assignment_expression, situation not implemented");
+    }
+}
+
+void translate_expression(ParserElem *elem) {
+    ParserElem *expression = elem;
+    registerCodeCollector(elem);
+    stack<ParserElem*> s;
+    
+    int symbol = expression->symbol;
+    expression = expression->firstChild;
+    
+    while (expression->endingSymbol == 0 && expression->symbol == symbol) { // expression list
+        s.push(expression);
+        expression = expression->firstChild;
+    }
+    
+    translate_assignment_expression(expression);
+    
+    while (!s.empty()) {
+        expression = s.top();
+        translate_assignment_expression(expression);
+        s.pop();
+    }
+    unregisterCodeCollector(elem);
+}
+
+

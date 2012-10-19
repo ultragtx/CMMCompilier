@@ -16,6 +16,7 @@
 #include "translator.h"
 
 #define ES_List 0
+#define ES_Code 1 //code generated
 
 #define MAX_CHILDS 5
 
@@ -580,7 +581,15 @@ void reduce26(int action) {		//    "assignment_expression => postfix_expression 
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = elems[0];
+    ParserElem *reduceElem = new ParserElem;
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    
+    reduceElem->firstChild = elems[0];
+    elems[0]->next = elems[2];
+    
+    delete elems[1];
+    
+    /*ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
     
     //
@@ -600,7 +609,7 @@ void reduce26(int action) {		//    "assignment_expression => postfix_expression 
     
     delete elems[1];
     //
-    
+    */
     currentState = go;
     
     stateStack.push(currentState);
@@ -644,8 +653,14 @@ void reduce28(int action) {		//    "expression => assignment_expression ;",
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = elems[0];
+    ParserElem *reduceElem = new ParserElem;
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    //    reduceElem->endingSymbol = elems[0]->endingSymbol;
+    //    reduceElem->intValue = elems[0]->intValue;
+    reduceElem->firstChild = elems[0];
+    elems[0]->next = elems[2];
+    
+    delete elems[1];
     
     currentState = go;
     
@@ -675,37 +690,22 @@ void reduce31(int action) {		//    "declaration => declaration_specifiers init_d
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = elems[0];
-    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
     
     int typeSize = elems[0]->intValue;
     
     translate_init_declarator_list(elems[1], typeSize);
     
-    /*ParserElem *next = elems[1]->firstChild;
+    ParserElem *reduceElem = elems[1];
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    reduceElem->endingSymbol = ES_Code;
+    reduceElem->code = elems[1]->code;
     
-    ParserElem *declarator = next->firstChild;
+    delete elems[0];
+    delete elems[2];
     
-    symtable[declarator->intValue].type = declarator->endingSymbol;
-    symtable[declarator->intValue].typeSize = typeSize;
-    
-    int realSize = symtable[declarator->intValue].size * typeSize;
-    
-    addrOffset += realSize;
-    symtable[declarator->intValue].addr = addrOffset;
-    
-    printf("[GENCODE]: subl $%d, %%esp\n", realSize);
-    
-    ParserElem *initializer = declarator->next;
-    if (initializer != NULL) { // declarator = initializer
-        if (initializer->endingSymbol == 0) { // { initializer_list }
-            translate_initializer_list(initializer, typeSize);
-        }
-        else { // assignment_expression
-            
-        }
-        
-    }*/
+    cout << "---------------" << endl;
+    cout << reduceElem->code;
+    cout << "---------------" << endl;
     
     currentState = go;
     
@@ -1197,9 +1197,8 @@ void reduce54(int action) {		//    "block_item => declaration ;",
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    ParserElem *reduceElem = new ParserElem;
+    ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
-    reduceElem->firstChild = elems[0];
     
     currentState = go;
     
