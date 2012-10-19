@@ -95,7 +95,10 @@ int lexOne(int *type, int *intValue, char **strValue) {
             }
             else {                              // identifier
                 *type = GeneralType_Identifier;
-                *intValue = lookup(lexBuff) || insert(lexBuff, GeneralType_Identifier);
+                *intValue = lookup(lexBuff);
+                if (*intValue == 0) {
+                    *intValue = insert(lexBuff, GeneralType_Identifier);
+                }
                 //debugPrint("identifier");
                 debugPrint(lexBuff);
             }

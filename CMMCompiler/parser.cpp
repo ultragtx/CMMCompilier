@@ -27,6 +27,7 @@ stack<ParserState> stateStack;
 stack<ParserElem*> elemStack;
 
 int addrOffset = 0;
+int registerFlag = 0;
 
 ParserElem * nextParseElem() { // lexone
     ParserElem *elem = new ParserElem;
@@ -96,8 +97,8 @@ int parse() {
             //cout << "step to " << action << endl;
         }
         else if (action >= AG_Reduce_Base && action < AG_Accept) {  // Reduce by A -> b
-//            reduceTable[action - AG_Reduce_Base](action);
-//            continue;
+            reduceTable[action - AG_Reduce_Base](action);
+            continue;
             
             int popCount = ProductCount[action - AG_Reduce_Base];
             while (popCount > 0) { // pop |b| times
@@ -185,7 +186,7 @@ void reduce01(int action) {		//    "program => type_specifier main ( ) compound_
     elemStack.push(reduceElem);
 }
 
-void reduce02(int action) {		//    "primary_expression => identifier ;",
+void reduce02(int action) {		//    "primary_expression => identifier ;", //D
     int popCount = ProductCount[action - AG_Reduce_Base];
     
     ParserElem *elems[popCount];
@@ -208,7 +209,7 @@ void reduce02(int action) {		//    "primary_expression => identifier ;",
     elemStack.push(reduceElem);
 }
 
-void reduce03(int action) {		//    "primary_expression => constant ;",
+void reduce03(int action) {		//    "primary_expression => constant ;", //D
     int popCount = ProductCount[action - AG_Reduce_Base];
     
     ParserElem *elems[popCount];
@@ -239,7 +240,7 @@ void reduce05(int action) {		//    "primary_expression => ( expression ) ;",
     
 }
 
-void reduce06(int action) {		//    "postfix_expression => primary_expression ;",
+void reduce06(int action) {		//    "postfix_expression => primary_expression ;", //D
     int popCount = ProductCount[action - AG_Reduce_Base];
     
     ParserElem *elems[popCount];
@@ -263,7 +264,59 @@ void reduce06(int action) {		//    "postfix_expression => primary_expression ;",
 }
 
 void reduce07(int action) {		//    "postfix_expression => postfix_expression [ expression ] ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    ParserElem *reduceElem = elems[0];
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    
+    //
+    
+    ParserElem *pos_exp = elems[0];
+    ParserElem *exp = elems[2];
+    int baseAddr = symtable[pos_exp->intValue].addr;
+    int typeSize = symtable[pos_exp->intValue].typeSize;
+
+    if (exp->endingSymbol == ES_Id) {
+        int idAddr = symtable[exp->intValue].addr;
+        // did not see the type size
+        printf("[GENCODE]: movl %d(%%ebp), %%edx\n", -idAddr);
+    }
+    else if (exp->endingSymbol == ES_Const) {
+        // won't happen in test code
+    }
+    else {
+        printf("[WARNING] reduce07 other types\n");
+    }
+    
+    if (registerFlag == 0) {
+        printf("[GENCODE]: movl %d(%%ebp, %%edx, %d), %%eax\n", -baseAddr, typeSize);
+    }
+    else {
+        printf("[GENCODE]: movl %d(%%ebp, %%edx, %d), %%ebx\n", -baseAddr, typeSize);
+    }
+    registerFlag = (registerFlag + 1) %2;
+    
+    reduceElem->endingSymbol = 0;
+    //
+    
+    delete elems[1];
+    delete elems[3];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce08(int action) {		//    "postfix_expression => postfix_expression ++ ;",
@@ -302,7 +355,42 @@ void reduce11(int action) {		//    "multiplicative_expression => postfix_express
 }
 
 void reduce12(int action) {		//    "multiplicative_expression => multiplicative_expression * postfix_expression ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    ParserElem *reduceElem = elems[0];
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    
+    
+    //
+    
+    ParserElem *multiplicative_expression = elems[0];
+    if (multiplicative_expression->endingSymbol == 0) { // code generated result in %exa or %exb depend on registerFlag
+        // assume both mul_exp and pos_exp generated
+        printf("[GENCODE]: mull %%ebx\n");
+        registerFlag = 0;
+    }
+    else {
+        printf("[WARNING]: reduce12, unimplemented situation\n");
+    }
+    
+    reduceElem->endingSymbol = 0;
+    //
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce13(int action) {		//    "multiplicative_expression => multiplicative_expression / postfix_expression ;",
@@ -333,7 +421,52 @@ void reduce14(int action) {		//    "additive_expression => multiplicative_expres
 }
 
 void reduce15(int action) {		//    "additive_expression => additive_expression + multiplicative_expression ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    ParserElem *reduceElem = elems[0];
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    
+    //
+    
+    
+    ParserElem *multiplicative_expression = elems[2];
+    ParserElem *additive_expression = elems[0];
+    if (multiplicative_expression->endingSymbol == 0) { // code generated result in %exa
+        // assume multiplicative_expression generated
+        if (additive_expression->endingSymbol == ES_Id) {
+            int addr = symtable[additive_expression->intValue].addr;
+            printf("[GENCODE]: movl %d(%%ebp), %%ebx\n", -addr);
+        }
+        else {
+            printf("[WARNING]: reduce15, (1)unimplemented situation\n");
+        }
+        printf("[GENCODE]: addl %%ebx, %%eax\n");
+        registerFlag = 0;
+    }
+    else {
+        printf("[WARNING]: reduce15, (2)unimplemented situation\n");
+    }
+    
+    delete elems[1];
+    
+    reduceElem->endingSymbol = 0;
+    //
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce16(int action) {		//    "additive_expression => additive_expression - multiplicative_expression ;",
@@ -451,10 +584,21 @@ void reduce26(int action) {		//    "assignment_expression => postfix_expression 
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
     
     //
-    int addr = symtable[elems[0]->intValue].addr;
-    int constVal = elems[2]->intValue;
+    ParserElem *postfix_expression = elems[0];
+    ParserElem *assignment_expression = elems[2];
     
-    printf("[GENCODE]: movl $%d, %d(%%ebp)\n", constVal, -addr);
+    int addr = symtable[postfix_expression->intValue].addr;
+    
+    if (assignment_expression->endingSymbol == 0) { // assignment_expression code generated and result in %eax
+        printf("[GENCODE]: movl %%eax, %d(%%ebp)\n", -addr);
+    }
+    else {
+        int constVal = elems[2]->intValue;
+        
+        printf("[GENCODE]: movl $%d, %d(%%ebp)\n", constVal, -addr);
+    }
+    
+    delete elems[1];
     //
     
     currentState = go;
@@ -463,7 +607,7 @@ void reduce26(int action) {		//    "assignment_expression => postfix_expression 
     elemStack.push(reduceElem);
 }
 
-void reduce27(int action) {		//    "assignment_operator =>	= ;",
+void reduce27(int action) {		//    "assignment_operator =>	= ;", //D
     int popCount = ProductCount[action - AG_Reduce_Base];
     
     ParserElem *elems[popCount];

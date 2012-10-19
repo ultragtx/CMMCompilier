@@ -59,7 +59,7 @@ void translate_init_declarator(ParserElem *init_declarator, int typeSize) {
     
     int realSize = symtable[declarator->intValue].size * typeSize;
     addrOffset += realSize;
-    symtable[declarator->intValue].addr = addrOffset - typeSize;
+    symtable[declarator->intValue].addr = addrOffset;
     
     printf("[GENCODE]: subl $%d, %%esp\n", realSize);
     ParserElem *initializer = declarator->next;
