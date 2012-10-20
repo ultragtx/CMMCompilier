@@ -229,6 +229,13 @@ void translate_multiplicative_expression(ParserElem *elem1, ParserElem *elem2, i
         submitCode(multiplicative_expression->code);
         genCode("[GENCODE]: %s %%ebx\n", operators[type]);
     }
+    else if (multiplicative_expression->endingSymbol == ES_Id && postfix_expression->endingSymbol == ES_Id) {
+        int addr1 = symtable[multiplicative_expression->intValue].addr;
+        int addr2 = symtable[multiplicative_expression->intValue].addr;
+        genCode("[GENCODE]: movl %d(%%ebp), %%eax\n", -addr1);
+        genCode("[GENCODE]: movl %d(%%ebp), %%ebx\n", -addr2);
+        genCode("[GENCODE]: %s %%ebx\n", operators[type]);
+    }
     else {
         printf("[WARNING]: translate_multiplicative_expression, situation not implemented\n");
     }
@@ -418,6 +425,7 @@ void translate_printf_params(ParserElem *elem) {
     }
     
     //params.push(stringWithFormat(printf_params->strValue)); not push
+    // TODO:
     while (!s.empty()) {
         printf_params = s.top();
         int addr = symtable[printf_params->intValue].addr;
@@ -433,6 +441,47 @@ void translate_printf_params(ParserElem *elem) {
     }
     genCode("[GENCODE]: pushl $str_literal_%d\n", str_literal_num);\
     genCode("[GENCODE]: call printf\n");
+    genCode("[GENCODE]: addl $%d, %%esp\n", offset * 4);
+    
+    str_literal_num++;
+    
+    elem->endingSymbol = ES_Code;
+    
+    unregisterCodeCollector(elem);
+}
+
+void translate_scanf_params(ParserElem *elem) {
+    ParserElem *scanf_params = elem;
+    registerCodeCollector(elem);
+    
+    stack<ParserElem*> s;
+    stack<string> params;
+    
+    int symbol = scanf_params->symbol;
+    scanf_params = scanf_params->firstChild;
+    
+    while (scanf_params->endingSymbol == 0 && scanf_params->symbol == symbol) { // list
+        s.push(scanf_params);
+        scanf_params = scanf_params->firstChild;
+    }
+    
+    //params.push(stringWithFormat(printf_params->strValue)); not push
+    // TODO:
+    while (!s.empty()) {
+        scanf_params = s.top();
+        int addr = symtable[scanf_params->intValue].addr;
+        params.push(stringWithFormat("[GENCODE]: pushl $%d\n", -addr));
+        s.pop();
+    }
+    
+    int offset = (int)params.size() + 1;
+    
+    while (!params.empty()) {
+        submitCode(params.top());
+        params.pop();
+    }
+    genCode("[GENCODE]: pushl $str_literal_%d\n", str_literal_num);\
+    genCode("[GENCODE]: call scanf\n");
     genCode("[GENCODE]: addl $%d, %%esp\n", offset * 4);
     
     str_literal_num++;
