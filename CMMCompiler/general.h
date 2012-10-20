@@ -208,6 +208,10 @@ typedef enum {
 
 const int NumOfMiddleSymbol = MS_PlaceHolder - MS_Program;
 
+// Extra fake eding symbol
+#define ES_List 0 // is a list
+#define ES_Code 1 // code generated
+
 struct ParserElem{
     int symbol;
     int endingSymbol = 0; // 0 for middle symbol without reduce

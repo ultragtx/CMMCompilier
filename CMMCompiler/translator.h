@@ -13,10 +13,16 @@
 #include "lalr.h"
 #include "general.h"
 
-void translate_initializer(ParserElem *initializer, int count, int typeSize);
-void translate_initializer_list(ParserElem *initializer, int typeSize);
-void translate_init_declarator(ParserElem *init_declarator, int typeSize);
 void translate_init_declarator_list(ParserElem *elem, int typeSize);
+void translate_block_item_list(ParserElem *elem);
+void translate_postifix_expression(ParserElem *elem1, ParserElem *elem2);
+void translate_postifix_expression_1(ParserElem *elem1);
+void translate_multiplicative_expression(ParserElem *elem1, ParserElem *elem2);
+void translate_additive_expression(ParserElem *elem1, ParserElem *elem2);
+void translate_assignment_expression(ParserElem *elem1, ParserElem *elem2);
+void translate_relational_expression(ParserElem *elem1, ParserElem *elem2);
+void translate_iteration_statement(ParserElem *elem1, ParserElem *elem2, ParserElem *elem3, ParserElem *elem4);
+//void translate_expression(ParserElem *elem);
 
 void reduce00(int action);
 void reduce01(int action);
