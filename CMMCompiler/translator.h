@@ -25,6 +25,7 @@ void translate_iteration_statement(ParserElem *elem1, ParserElem *elem2, ParserE
 void translate_selection_statement(ParserElem *elem1, ParserElem *elem2, ParserElem *elem3);
 void translate_printf_params(ParserElem *elem);
 void translate_scanf_params(ParserElem *elem);
+void translate_jump_statement(ParserElem *elem);
 //void translate_expression(ParserElem *elem);
 
 void reduce00(int action);

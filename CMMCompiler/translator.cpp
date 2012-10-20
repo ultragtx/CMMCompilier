@@ -257,7 +257,21 @@ void translate_additive_expression(ParserElem *elem1, ParserElem *elem2, int typ
         submitCode(multiplicative_expression->code);
         int addr = symtable[additive_expression->intValue].addr;
         genCode("[GENCODE]: movl %d(%%ebp), %%ebx\n", -addr);
-        genCode("[GENCODE]: %s %%ebx, %%eax\n", operators[type], -addr);
+        genCode("[GENCODE]: %s %%ebx, %%eax\n", operators[type]);
+    }
+    else if (additive_expression->endingSymbol == ES_Id && multiplicative_expression->endingSymbol == ES_Const) {
+        int addr = symtable[additive_expression->intValue].addr;
+        int constVal = multiplicative_expression->intValue;
+        genCode("[GENCODE]: movl %d(%%ebp), %%eax\n", -addr);
+        genCode("[GENCODE]: movl $%d, %%ebx\n", constVal);
+        genCode("[GENCODE]: %s %%ebx, %%eax\n", operators[type]);
+    }
+    else if (additive_expression->endingSymbol == ES_Const && multiplicative_expression->endingSymbol == ES_Id) {
+        int addr = symtable[multiplicative_expression->intValue].addr;
+        int constVal = additive_expression->intValue;
+        genCode("[GENCODE]: movl %d(%%ebp), %%ebx\n", -addr);
+        genCode("[GENCODE]: movl $%d, %%eax\n", constVal);
+        genCode("[GENCODE]: %s %%ebx, %%eax\n", operators[type]);
     }
     else {
         printf("[WARNING]: translate_additive_expression, situation not implemented\n");
@@ -489,6 +503,10 @@ void translate_scanf_params(ParserElem *elem) {
     elem->endingSymbol = ES_Code;
     
     unregisterCodeCollector(elem);
+}
+
+void translate_jump_statement(ParserElem *elem) {
+    elem->endingSymbol = ES_Code;
 }
 
 void translate_block_item(ParserElem *elem) {
