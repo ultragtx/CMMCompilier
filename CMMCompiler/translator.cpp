@@ -195,18 +195,13 @@ void translate_postifix_expression_1(ParserElem *elem1) { // "postfix_expression
     
     registerCodeCollector(elem1);
     
-    int baseAddr = symtable[pos_exp->intValue].addr;
-    int typeSize = symtable[pos_exp->intValue].typeSize;
-    
     if (elem1->endingSymbol == ES_Id) {
-        int idAddr = symtable[elem1->intValue].addr;
+        int idAddr = symtable[pos_exp->intValue].addr;
         genCode("[GENCODE]: addl $1, %d(%%ebp)\n", -idAddr);
     }
     else {
         printf("[WARNING %d]: translate_postifix_expression, situation not implemented\n", lineno);
     }
-    
-    genCode("[GENCODE]: movl %d(%%ebp, %%edx, %d), %%eax\n", -baseAddr, typeSize);
     
     elem1->endingSymbol = ES_Code;
     
@@ -344,7 +339,9 @@ void translate_iteration_statement(ParserElem *elem1, ParserElem *elem2, ParserE
         submitCode(expression1->code);
         genCode("[GENCODE]: for_begin_%d:\n", for_number);
         submitCode(expression2->code);
-        genCode("for_end_%d\n", for_number);
+        genCode("for_st_%d\n", for_number);
+        genCode("[GENCODE]: jmp for_end_%d\n", for_number);
+        genCode("[GENCODE]: for_st_%d:\n", for_number);
         submitCode(statement->code);
         submitCode(expression3->code);
         genCode("[GENCODE]: jmp for_begin_%d\n", for_number);
