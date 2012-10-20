@@ -23,6 +23,7 @@ void translate_relational_expression(ParserElem *elem1, ParserElem *elem2, int t
 void translate_assignment_expression(ParserElem *elem1, ParserElem *elem2);
 void translate_iteration_statement(ParserElem *elem1, ParserElem *elem2, ParserElem *elem3, ParserElem *elem4);
 void translate_selection_statement(ParserElem *elem1, ParserElem *elem2, ParserElem *elem3);
+void translate_printf_params(ParserElem *elem);
 //void translate_expression(ParserElem *elem);
 
 void reduce00(int action);

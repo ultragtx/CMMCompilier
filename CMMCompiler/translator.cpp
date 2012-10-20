@@ -21,6 +21,7 @@ string tempStr;
 
 int for_number = 0;
 int if_number = 0;
+int str_literal_num = 0;
 
 void registerCodeCollector(ParserElem *elem) {
     codeCollectorStack.push(elem);
@@ -52,6 +53,18 @@ void unregisterCodeCollector(ParserElem *elem) {
     (currentCollector->code).erase();
     (currentCollector->code).append(tempStr);
     codeCollectorStack.pop();
+}
+
+string stringWithFormat(const char *fmt, ...) {
+    char textString[MAX_BUFFER] = {'\0'};
+    
+    va_list args;
+    va_start ( args, fmt );
+    vsnprintf ( textString, MAX_BUFFER, fmt, args );
+    va_end ( args );
+    string retStr = textString;
+    
+    return retStr;
 }
 
 void translate_initializer(ParserElem *initializer, int count, int typeSize) { // actually assignment
@@ -388,6 +401,46 @@ void translate_expression(ParserElem *elem) {
     
     unregisterCodeCollector(elem);
 }*/
+
+void translate_printf_params(ParserElem *elem) {
+    ParserElem *printf_params = elem;
+    registerCodeCollector(elem);
+    
+    stack<ParserElem*> s;
+    stack<string> params;
+    
+    int symbol = printf_params->symbol;
+    printf_params = printf_params->firstChild;
+    
+    while (printf_params->endingSymbol == 0 && printf_params->symbol == symbol) { // list
+        s.push(printf_params);
+        printf_params = printf_params->firstChild;
+    }
+    
+    //params.push(stringWithFormat(printf_params->strValue)); not push
+    while (!s.empty()) {
+        printf_params = s.top();
+        int addr = symtable[printf_params->intValue].addr;
+        params.push(stringWithFormat("[GENCODE]: pushl %d(%%ebp)\n", -addr));
+        s.pop();
+    }
+    
+    int offset = (int)params.size() + 1;
+    
+    while (!params.empty()) {
+        submitCode(params.top());
+        params.pop();
+    }
+    genCode("[GENCODE]: pushl $str_literal_%d\n", str_literal_num);\
+    genCode("[GENCODE]: call printf\n");
+    genCode("[GENCODE]: addl $%d, %%esp\n", offset * 4);
+    
+    str_literal_num++;
+    
+    elem->endingSymbol = ES_Code;
+    
+    unregisterCodeCollector(elem);
+}
 
 void translate_block_item(ParserElem *elem) {
     ParserElem *block_item = elem;

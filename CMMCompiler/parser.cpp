@@ -1349,11 +1349,49 @@ void reduce55(int action) {		//    "block_item => statement ;",
 }
 
 void reduce56(int action) {		//    "expression_statement => printf_statement semi ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    ParserElem *reduceElem = elems[0];
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce57(int action) {		//    "expression_statement => scanf_statement semi ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    ParserElem *reduceElem = elems[0];
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce58(int action) {		//    "expression_statement => expression semi ;		// here is a semi",
@@ -1454,15 +1492,83 @@ void reduce62(int action) {		//    "jump_statement => return expression semi ;	/
 }
 
 void reduce63(int action) {		//    "printf_statement => printf ( printf_params ) ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    translate_printf_params(elems[2]);
+    
+    ParserElem *reduceElem = elems[2];
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    
+    delete elems[0];
+    delete elems[1];
+    delete elems[3];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce64(int action) {		//    "printf_params => string_literal ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    ParserElem *reduceElem = new ParserElem;
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    reduceElem->firstChild = elems[0];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce65(int action) {		//    "printf_params => printf_params , identifier ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    ParserElem *reduceElem = new ParserElem;
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    reduceElem->firstChild = elems[0];
+    elems[0]->next = elems[2];
+    
+    delete elems[1];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce66(int action) {		//    "scanf_statement => scanf ( scanf_params ) ;",
