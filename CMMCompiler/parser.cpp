@@ -371,7 +371,7 @@ void reduce12(int action) {		//    "multiplicative_expression => multiplicative_
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    translate_multiplicative_expression(elems[0], elems[2]);
+    translate_multiplicative_expression(elems[0], elems[2], 0); // 0 for mul 1 for div
     
     ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
@@ -425,7 +425,7 @@ void reduce15(int action) {		//    "additive_expression => additive_expression +
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    translate_additive_expression(elems[0], elems[2]);
+    translate_additive_expression(elems[0], elems[2], 0); // 0 for add 1 for sub
     
     ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
@@ -479,7 +479,7 @@ void reduce18(int action) {		//    "relational_expression => relational_expressi
     int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
     int go = ActionGotoTable[currentState][gotoCol];
     
-    translate_relational_expression(elems[0], elems[2]);
+    translate_relational_expression(elems[0], elems[2], 0); //0 for < 1 for > 2 for <= 3 for >=
     
     ParserElem *reduceElem = elems[0];
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
@@ -493,15 +493,84 @@ void reduce18(int action) {		//    "relational_expression => relational_expressi
 }
 
 void reduce19(int action) {		//    "relational_expression => relational_expression > additive_expression ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    translate_relational_expression(elems[0], elems[2], 1); //0 for < 1 for > 2 for <= 3 for >=
+    
+    ParserElem *reduceElem = elems[0];
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    
+    delete elems[1];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce20(int action) {		//    "relational_expression => relational_expression <= additive_expression ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    translate_relational_expression(elems[0], elems[2], 2); //0 for < 1 for > 2 for <= 3 for >=
+    
+    ParserElem *reduceElem = elems[0];
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    
+    delete elems[1];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce21(int action) {		//    "relational_expression => relational_expression >= additive_expression ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    translate_relational_expression(elems[0], elems[2], 3); //0 for < 1 for > 2 for <= 3 for >=
+    
+    ParserElem *reduceElem = elems[0];
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    
+    delete elems[1];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce22(int action) {		//    "equality_expression => relational_expression ;", //D
@@ -1315,7 +1384,35 @@ void reduce59(int action) {		//    "selection_statement => //if ( expression ) s
 }
 
 void reduce60(int action) {		//    "selection_statement => if ( expression ) statement else statement ;",
+    int popCount = ProductCount[action - AG_Reduce_Base];
     
+    ParserElem *elems[popCount];
+    while (popCount > 0) { // pop |b| times
+        popCount--;
+        elems[popCount] = elemStack.top();
+        stateStack.pop();
+        elemStack.pop();
+    }
+    ParserState currentState = stateStack.top();
+    int gotoCol = ProductSource[action - AG_Reduce_Base] - MS_Program + NumOfEndingSymbol;
+    int go = ActionGotoTable[currentState][gotoCol];
+    
+    translate_selection_statement(elems[2], elems[4], elems[6]);
+    
+    ParserElem *reduceElem = elems[2];
+    reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
+    
+    delete elems[0];
+    delete elems[1];
+    delete elems[3];
+    delete elems[4];
+    delete elems[5];
+    delete elems[6];
+    
+    currentState = go;
+    
+    stateStack.push(currentState);
+    elemStack.push(reduceElem);
 }
 
 void reduce61(int action) {		//    "iteration_statement => for ( expression semi expression semi expression ) statement ; // here are 2 semi",

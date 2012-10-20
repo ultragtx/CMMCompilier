@@ -200,7 +200,10 @@ void translate_postifix_expression_1(ParserElem *elem1) { // "postfix_expression
     unregisterCodeCollector(elem1);
 }
 
-void translate_multiplicative_expression(ParserElem *elem1, ParserElem *elem2) { // "multiplicative_expression => multiplicative_expression * postfix_expression ;",
+void translate_multiplicative_expression(ParserElem *elem1, ParserElem *elem2, int type) { // "multiplicative_expression => multiplicative_expression * postfix_expression ;",
+    
+    static const char * const operators[2] = {"mull", "divl"};
+    
     ParserElem *multiplicative_expression = elem1;
     ParserElem *postfix_expression = elem2;
     
@@ -211,7 +214,7 @@ void translate_multiplicative_expression(ParserElem *elem1, ParserElem *elem2) {
         genCode("[GENCODE]: movl %%eax, %%ebx\n");
         //genCode("$$\n");
         submitCode(multiplicative_expression->code);
-        genCode("[GENCODE]: mull %%ebx\n");
+        genCode("[GENCODE]: %s %%ebx\n", operators[type]);
     }
     else {
         printf("[WARNING]: translate_multiplicative_expression, situation not implemented\n");
@@ -222,7 +225,9 @@ void translate_multiplicative_expression(ParserElem *elem1, ParserElem *elem2) {
     unregisterCodeCollector(elem2);
 }
 
-void translate_additive_expression(ParserElem *elem1, ParserElem *elem2) { // +
+void translate_additive_expression(ParserElem *elem1, ParserElem *elem2, int type) { // +, -
+    static const char * const operators[2] = {"addl", "subl"};
+    
     ParserElem *additive_expression = elem1;
     ParserElem *multiplicative_expression = elem2;
     
@@ -232,7 +237,7 @@ void translate_additive_expression(ParserElem *elem1, ParserElem *elem2) { // +
         submitCode(multiplicative_expression->code);
         int addr = symtable[additive_expression->intValue].addr;
         genCode("[GENCODE]: movl %d(%%ebp), %%ebx\n", -addr);
-        genCode("[GENCODE]: addl %%ebx, %%eax\n", -addr);
+        genCode("[GENCODE]: %s %%ebx, %%eax\n", operators[type], -addr);
     }
     else {
         printf("[WARNING]: translate_additive_expression, situation not implemented\n");
@@ -268,7 +273,9 @@ void translate_assignment_expression(ParserElem *elem1, ParserElem *elem2) { // 
     unregisterCodeCollector(elem2);
 }
 
-void translate_relational_expression(ParserElem *elem1, ParserElem *elem2) { // <
+void translate_relational_expression(ParserElem *elem1, ParserElem *elem2, int type) { // < > <= >=
+    static const char * const operators[4] = {"jb", "ja", "jbe", "jae"};
+    
     ParserElem *relational_expression = elem1;
     ParserElem *additive_expression = elem2;
     
@@ -280,7 +287,7 @@ void translate_relational_expression(ParserElem *elem1, ParserElem *elem2) { // 
         genCode("[GENCODE]: movl %d(%%ebp), %%eax\n", -addr);
         genCode("[GENCODE]: movl $%d, %%ebx\n", constVal);
         genCode("[GENCODE]: cmp %%eax, %%ebx\n");
-        genCode("[GENCODE]: jb "); // waitng for a jump label
+        genCode("[GENCODE]: %s ", operators[type]); // waitng for a jump label
     }
     else {
         printf("[WARNING]: translate_relational_expression, situation not implemented\n");
@@ -312,6 +319,33 @@ void translate_iteration_statement(ParserElem *elem1, ParserElem *elem2, ParserE
     }
     else {
         printf("[WARNING]: translate_iteration_statement, situation not implemented\n");
+    }
+    
+    elem1->endingSymbol = ES_Code;
+    
+    unregisterCodeCollector(elem2);
+}
+
+void translate_selection_statement(ParserElem *elem1, ParserElem *elem2, ParserElem *elem3) { // if else
+    ParserElem *expression = elem1;
+    ParserElem *statement1 = elem2;
+    ParserElem *statement2 = elem3;
+    
+    registerCodeCollector(elem1);
+    
+    if (expression->endingSymbol == ES_Code && statement1->endingSymbol == ES_Code && statement2->endingSymbol == ES_Code) {
+        submitCode(expression->code);
+        genCode("if_part_%d\n", if_number);
+        submitCode(statement2->code);
+        genCode("[GENCODE]: jmp if_end_%d\n", if_number);
+        genCode("[GENCODE]: if_part_%d:\n", if_number);
+        submitCode(statement1->code);
+        genCode("[GENCODE]: if_end_%d:\n", if_number);
+        
+        if_number++;
+    }
+    else {
+        printf("[WARNING]: translate_selection_statement, situation not implemented\n");
     }
     
     elem1->endingSymbol = ES_Code;
