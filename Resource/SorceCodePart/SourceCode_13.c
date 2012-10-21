@@ -6,8 +6,7 @@ int main(){
     int temp;
     int i;
  
-    printf("please input your student number:");
-    scanf("%d",&stu_number);
+    printf("please input your student number:\n");
  
     sum = 0;
     temp = 0;
@@ -15,8 +14,10 @@ int main(){
     {
          sum = sum + score[i] * credit[i];
          temp = temp + credit[i];
+		 printf("[%d], [%d]\n", sum, temp);
     }
     mean = sum / temp;
+	printf("[%d]\n", mean);
  
     if(mean >= 60){
          mean = mean - 60;

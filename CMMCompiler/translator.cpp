@@ -73,8 +73,8 @@ void translate_initializer(ParserElem *initializer, int count, int typeSize) { /
         case ES_Const:
             //printf("[GENCODE]: movl $%d, %%edx\n", count);
             //printf("[GENCODE]: movl $%d, %d(%%ebp, %%edx, %d)\n", initializer->intValue, -addrOffset, typeSize);
-            genCode("[GENCODE]: movl $%d, %%edx\n", count);
-            genCode("[GENCODE]: movl $%d, %d(%%ebp, %%edx, %d)\n", initializer->intValue, -addrOffset, typeSize);
+            genCode("\tmovl $%d, %%edx\n", count);
+            genCode("\tmovl $%d, %d(%%ebp, %%edx, %d)\n", initializer->intValue, -addrOffset, typeSize);
             break;
             
         default:
@@ -123,7 +123,7 @@ void translate_init_declarator(ParserElem *init_declarator, int typeSize) {
     symtable[declarator->intValue].addr = addrOffset;
     
     //printf("[GENCODE]: subl $%d, %%esp\n", realSize);
-    genCode("[GENCODE]: subl $%d, %%esp\n", realSize);
+    genCode("\tsubl $%d, %%esp\n", realSize);
     ParserElem *initializer = declarator->next;
     if (initializer != NULL) { // declarator = initializer
         if (initializer->endingSymbol == 0) { // { initializer_list }
@@ -173,7 +173,7 @@ void translate_postifix_expression(ParserElem *elem1, ParserElem *elem2) { // "p
         int idAddr = symtable[exp->intValue].addr;
         // did not check the type size
         //printf("[GENCODE]: movl %d(%%ebp), %%edx\n", -idAddr);
-        genCode("[GENCODE]: movl %d(%%ebp), %%edx\n", -idAddr);
+        genCode("\tmovl %d(%%ebp), %%edx\n", -idAddr);
     }
     else if (exp->endingSymbol == ES_Const) {
         // won't happen in test code
@@ -182,7 +182,7 @@ void translate_postifix_expression(ParserElem *elem1, ParserElem *elem2) { // "p
         printf("[WARNING %d]: translate_postifix_expression, situation not implemented\n", lineno);
     }
     
-    genCode("[GENCODE]: movl %d(%%ebp, %%edx, %d), %%eax\n", -baseAddr, typeSize);
+    genCode("\tmovl %d(%%ebp, %%edx, %d), %%eax\n", -baseAddr, typeSize);
     //genCode("##\n");
     
     elem1->endingSymbol = ES_Code;
@@ -197,7 +197,7 @@ void translate_postifix_expression_1(ParserElem *elem1) { // "postfix_expression
     
     if (elem1->endingSymbol == ES_Id) {
         int idAddr = symtable[pos_exp->intValue].addr;
-        genCode("[GENCODE]: addl $1, %d(%%ebp)\n", -idAddr);
+        genCode("\taddl $1, %d(%%ebp)\n", -idAddr);
     }
     else {
         printf("[WARNING %d]: translate_postifix_expression, situation not implemented\n", lineno);
@@ -219,17 +219,18 @@ void translate_multiplicative_expression(ParserElem *elem1, ParserElem *elem2, i
     
     if (multiplicative_expression->endingSymbol == ES_Code && postfix_expression->endingSymbol == ES_Code) {
         submitCode(postfix_expression->code);
-        genCode("[GENCODE]: movl %%eax, %%ebx\n");
+        genCode("\tmovl %%eax, %%ebx\n");
         //genCode("$$\n");
         submitCode(multiplicative_expression->code);
-        genCode("[GENCODE]: %s %%ebx\n", operators[type]);
+        genCode("\t%s %%ebx\n", operators[type]);
     }
     else if (multiplicative_expression->endingSymbol == ES_Id && postfix_expression->endingSymbol == ES_Id) {
         int addr1 = symtable[multiplicative_expression->intValue].addr;
-        int addr2 = symtable[multiplicative_expression->intValue].addr;
-        genCode("[GENCODE]: movl %d(%%ebp), %%eax\n", -addr1);
-        genCode("[GENCODE]: movl %d(%%ebp), %%ebx\n", -addr2);
-        genCode("[GENCODE]: %s %%ebx\n", operators[type]);
+        int addr2 = symtable[postfix_expression->intValue].addr;
+        genCode("\tmovl %d(%%ebp), %%eax\n", -addr1);
+        genCode("\tmovl %d(%%ebp), %%ebx\n", -addr2);
+        genCode("\tmovl $0, %%edx\n");
+        genCode("\t%s %%ebx\n", operators[type]);
     }
     else {
         printf("[WARNING]: translate_multiplicative_expression, situation not implemented\n");
@@ -251,22 +252,22 @@ void translate_additive_expression(ParserElem *elem1, ParserElem *elem2, int typ
     if (additive_expression->endingSymbol == ES_Id && multiplicative_expression->endingSymbol == ES_Code) {
         submitCode(multiplicative_expression->code);
         int addr = symtable[additive_expression->intValue].addr;
-        genCode("[GENCODE]: movl %d(%%ebp), %%ebx\n", -addr);
-        genCode("[GENCODE]: %s %%ebx, %%eax\n", operators[type]);
+        genCode("\tmovl %d(%%ebp), %%ebx\n", -addr);
+        genCode("\t%s %%ebx, %%eax\n", operators[type]);
     }
     else if (additive_expression->endingSymbol == ES_Id && multiplicative_expression->endingSymbol == ES_Const) {
         int addr = symtable[additive_expression->intValue].addr;
         int constVal = multiplicative_expression->intValue;
-        genCode("[GENCODE]: movl %d(%%ebp), %%eax\n", -addr);
-        genCode("[GENCODE]: movl $%d, %%ebx\n", constVal);
-        genCode("[GENCODE]: %s %%ebx, %%eax\n", operators[type]);
+        genCode("\tmovl %d(%%ebp), %%eax\n", -addr);
+        genCode("\tmovl $%d, %%ebx\n", constVal);
+        genCode("\t%s %%ebx, %%eax\n", operators[type]);
     }
     else if (additive_expression->endingSymbol == ES_Const && multiplicative_expression->endingSymbol == ES_Id) {
         int addr = symtable[multiplicative_expression->intValue].addr;
         int constVal = additive_expression->intValue;
-        genCode("[GENCODE]: movl %d(%%ebp), %%ebx\n", -addr);
-        genCode("[GENCODE]: movl $%d, %%eax\n", constVal);
-        genCode("[GENCODE]: %s %%ebx, %%eax\n", operators[type]);
+        genCode("\tmovl %d(%%ebp), %%ebx\n", -addr);
+        genCode("\tmovl $%d, %%eax\n", constVal);
+        genCode("\t%s %%ebx, %%eax\n", operators[type]);
     }
     else {
         printf("[WARNING]: translate_additive_expression, situation not implemented\n");
@@ -286,12 +287,12 @@ void translate_assignment_expression(ParserElem *elem1, ParserElem *elem2) { // 
     if (postfix_expression->endingSymbol == ES_Id && assignment_expression->endingSymbol == ES_Code) {
         submitCode(assignment_expression->code);
         int addr = symtable[postfix_expression->intValue].addr;
-        genCode("[GENCODE]: movl %%eax, %d(%%ebp)\n", -addr);
+        genCode("\tmovl %%eax, %d(%%ebp)\n", -addr);
     }
     else if (postfix_expression->endingSymbol == ES_Id && assignment_expression->endingSymbol == ES_Const) {
         int addr = symtable[postfix_expression->intValue].addr;
         int constVal = assignment_expression->intValue;
-        genCode("[GENCODE]: movl $%d, %d(%%ebp)\n", constVal, -addr);
+        genCode("\tmovl $%d, %d(%%ebp)\n", constVal, -addr);
     }
     else {
         printf("[WARNING]: translate_additive_expression(2), situation not implemented\n");
@@ -313,10 +314,10 @@ void translate_relational_expression(ParserElem *elem1, ParserElem *elem2, int t
     if (relational_expression->endingSymbol == ES_Id && additive_expression->endingSymbol == ES_Const) {
         int addr = symtable[relational_expression->intValue].addr;
         int constVal = additive_expression->intValue;
-        genCode("[GENCODE]: movl %d(%%ebp), %%eax\n", -addr);
-        genCode("[GENCODE]: movl $%d, %%ebx\n", constVal);
-        genCode("[GENCODE]: cmp %%eax, %%ebx\n");
-        genCode("[GENCODE]: %s ", operators[type]); // waitng for a jump label
+        genCode("\tmovl %d(%%ebp), %%eax\n", -addr);
+        genCode("\tmovl $%d, %%ebx\n", constVal);
+        genCode("\tcmp %%ebx, %%eax\n");
+        genCode("\t%s ", operators[type]); // waitng for a jump label
     }
     else {
         printf("[WARNING]: translate_relational_expression, situation not implemented\n");
@@ -337,15 +338,15 @@ void translate_iteration_statement(ParserElem *elem1, ParserElem *elem2, ParserE
     
     if (expression1->endingSymbol == ES_Code && expression2->endingSymbol == ES_Code && expression3->endingSymbol == ES_Code && statement->endingSymbol == ES_Code) {
         submitCode(expression1->code);
-        genCode("[GENCODE]: for_begin_%d:\n", for_number);
+        genCode("for_begin_%d:\n", for_number);
         submitCode(expression2->code);
         genCode("for_st_%d\n", for_number);
-        genCode("[GENCODE]: jmp for_end_%d\n", for_number);
-        genCode("[GENCODE]: for_st_%d:\n", for_number);
+        genCode("\tjmp for_end_%d\n", for_number);
+        genCode("for_st_%d:\n", for_number);
         submitCode(statement->code);
         submitCode(expression3->code);
-        genCode("[GENCODE]: jmp for_begin_%d\n", for_number);
-        genCode("[GENCODE]: for_end_%d:\n", for_number);
+        genCode("\tjmp for_begin_%d\n", for_number);
+        genCode("for_end_%d:\n", for_number);
         for_number++;
     }
     else {
@@ -368,10 +369,10 @@ void translate_selection_statement(ParserElem *elem1, ParserElem *elem2, ParserE
         submitCode(expression->code);
         genCode("if_part_%d\n", if_number);
         submitCode(statement2->code);
-        genCode("[GENCODE]: jmp if_end_%d\n", if_number);
-        genCode("[GENCODE]: if_part_%d:\n", if_number);
+        genCode("\tjmp if_end_%d\n", if_number);
+        genCode("if_part_%d:\n", if_number);
         submitCode(statement1->code);
-        genCode("[GENCODE]: if_end_%d:\n", if_number);
+        genCode("if_end_%d:\n", if_number);
         
         if_number++;
     }
@@ -438,9 +439,9 @@ void translate_printf_params(ParserElem *elem) {
     //params.push(stringWithFormat(printf_params->strValue)); not push
     // TODO:
     while (!s.empty()) {
-        printf_params = s.top();
+        printf_params = s.top()->next;
         int addr = symtable[printf_params->intValue].addr;
-        params.push(stringWithFormat("[GENCODE]: pushl %d(%%ebp)\n", -addr));
+        params.push(stringWithFormat("\tpushl %d(%%ebp)\n", -addr));
         s.pop();
     }
     
@@ -450,9 +451,9 @@ void translate_printf_params(ParserElem *elem) {
         submitCode(params.top());
         params.pop();
     }
-    genCode("[GENCODE]: pushl $str_literal_%d\n", str_literal_num);\
-    genCode("[GENCODE]: call printf\n");
-    genCode("[GENCODE]: addl $%d, %%esp\n", offset * 4);
+    genCode("\tpushl $str_literal_%d\n", str_literal_num);\
+    genCode("\tcall printf\n");
+    genCode("\taddl $%d, %%esp\n", offset * 4);
     
     str_literal_num++;
     
@@ -481,7 +482,7 @@ void translate_scanf_params(ParserElem *elem) {
     while (!s.empty()) {
         scanf_params = s.top();
         int addr = symtable[scanf_params->intValue].addr;
-        params.push(stringWithFormat("[GENCODE]: pushl $%d\n", -addr));
+        params.push(stringWithFormat("\tpushl $%d\n", -addr));
         s.pop();
     }
     
@@ -491,9 +492,9 @@ void translate_scanf_params(ParserElem *elem) {
         submitCode(params.top());
         params.pop();
     }
-    genCode("[GENCODE]: pushl $str_literal_%d\n", str_literal_num);\
-    genCode("[GENCODE]: call scanf\n");
-    genCode("[GENCODE]: addl $%d, %%esp\n", offset * 4);
+    genCode("\tpushl $str_literal_%d\n", str_literal_num);\
+    genCode("\tcall scanf\n");
+    genCode("\taddl $%d, %%esp\n", offset * 4);
     
     str_literal_num++;
     
