@@ -480,9 +480,9 @@ void translate_scanf_params(ParserElem *elem) {
     //params.push(stringWithFormat(printf_params->strValue)); not push
     // TODO:
     while (!s.empty()) {
-        scanf_params = s.top();
+        scanf_params = s.top()->next;
         int addr = symtable[scanf_params->intValue].addr;
-        params.push(stringWithFormat("\tpushl $%d\n", -addr));
+        params.push(stringWithFormat("\tleal %d(%%ebp), %%eax\n\tpushl %%eax\n", -addr));
         s.pop();
     }
     

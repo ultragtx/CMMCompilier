@@ -1,7 +1,7 @@
 int main(){
     int score[6] = {76, 82, 90, 86, 79, 62};
     int credit[6] = {2, 2, 1, 2, 2, 3};
-    int stu_number;
+    int stu_number = 10;
     float mean, sum;
     int temp;
     int i;

@@ -1,0 +1,2 @@
+as -o x.o source.s
+gcc source.s -o xx

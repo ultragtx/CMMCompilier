@@ -7,6 +7,7 @@ int main(){
     int i;
  
     printf("please input your student number:\n");
+	scanf("%d",&stu_number);
  
     sum = 0;
     temp = 0;
