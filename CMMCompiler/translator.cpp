@@ -16,12 +16,31 @@
 
 using namespace std;
 
-stack<ParserElem*> codeCollectorStack;
-string tempStr;
-
 int for_number = 0;
 int if_number = 0;
 int str_literal_num = 0;
+
+string rodataSection = ".section .rodata\n";
+
+string stringWithFormat(const char *fmt, ...) {
+    char textString[MAX_BUFFER] = {'\0'};
+    
+    va_list args;
+    va_start ( args, fmt );
+    vsnprintf ( textString, MAX_BUFFER, fmt, args );
+    va_end ( args );
+    string retStr = textString;
+    
+    return retStr;
+}
+
+void addAscizToRodata(string str) {
+    string name = stringWithFormat("str_literal_%d:", str_literal_num);
+    rodataSection += name + " .asciz " + "\"" + str + "\"" + "\n";
+}
+
+stack<ParserElem*> codeCollectorStack;
+string tempStr;
 
 void registerCodeCollector(ParserElem *elem) {
     codeCollectorStack.push(elem);
@@ -53,18 +72,6 @@ void unregisterCodeCollector(ParserElem *elem) {
     (currentCollector->code).erase();
     (currentCollector->code).append(tempStr);
     codeCollectorStack.pop();
-}
-
-string stringWithFormat(const char *fmt, ...) {
-    char textString[MAX_BUFFER] = {'\0'};
-    
-    va_list args;
-    va_start ( args, fmt );
-    vsnprintf ( textString, MAX_BUFFER, fmt, args );
-    va_end ( args );
-    string retStr = textString;
-    
-    return retStr;
 }
 
 void translate_initializer(ParserElem *initializer, int count, int typeSize) { // actually assignment
@@ -435,9 +442,9 @@ void translate_printf_params(ParserElem *elem) {
         s.push(printf_params);
         printf_params = printf_params->firstChild;
     }
+
+    addAscizToRodata(stringWithFormat(printf_params->strValue));
     
-    //params.push(stringWithFormat(printf_params->strValue)); not push
-    // TODO:
     while (!s.empty()) {
         printf_params = s.top()->next;
         int addr = symtable[printf_params->intValue].addr;
@@ -477,8 +484,8 @@ void translate_scanf_params(ParserElem *elem) {
         scanf_params = scanf_params->firstChild;
     }
     
-    //params.push(stringWithFormat(printf_params->strValue)); not push
-    // TODO:
+    addAscizToRodata(stringWithFormat(scanf_params->strValue));
+    
     while (!s.empty()) {
         scanf_params = s.top()->next;
         int addr = symtable[scanf_params->intValue].addr;

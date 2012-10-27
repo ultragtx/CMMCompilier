@@ -10,8 +10,11 @@
 #define __CMMCompiler__translator__
 
 #include <iostream>
+#include <string>
 #include "lalr.h"
 #include "general.h"
+
+extern std::string rodataSection;
 
 void translate_init_declarator_list(ParserElem *elem, int typeSize);
 void translate_block_item_list(ParserElem *elem);

@@ -110,6 +110,9 @@ int lexOne(int *type, int *intValue, char **strValue) {
                 elemCh = fgetc(inFile);
                 if (elemCh != '\"') {
                     lexBuff[buffIndex++] = elemCh;
+                    if (elemCh == '%') {                //double %
+                        lexBuff[buffIndex++] = elemCh;
+                    }
                 }
                 else {
                     break;

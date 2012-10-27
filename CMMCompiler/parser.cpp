@@ -28,7 +28,6 @@ int addrOffset = 0;
 
 ParserElem * nextParseElem() { // lexone
     ParserElem *elem = new ParserElem;
-    // TODO: lex
     int type;
     int intValue;
     char *strValue;
@@ -179,9 +178,19 @@ void reduce01(int action) {		//    "program => type_specifier main ( ) compound_
     reduceElem->symbol = ProductSource[action - AG_Reduce_Base];
     reduceElem->firstChild = elems[0];
     
-    cout << "---------------" << endl;
+    cout << rodataSection;
+    
+    cout << ".section .text" << endl;
+    cout << ".globl main" << endl;
+    cout << "main:" << endl;
+    
+    //cout << "---------------" << endl;
     cout << elems[4]->code;
-    cout << "***************" << endl;
+    //cout << "***************" << endl;
+    
+    cout << "\tmovl $1, %eax" << endl;
+    cout << "\tmovl $0, %ebx" << endl;
+    cout << "\tint $0x80" << endl;
     
     delete elems[0];
     delete elems[1];
