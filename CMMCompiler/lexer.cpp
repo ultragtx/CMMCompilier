@@ -45,6 +45,13 @@ int lexOne(int *type, int *intValue, char **strValue) {
             debugPrint("EOF");
             return LexReturnType_EOF;
         }
+        else if (elemCh == '#') {                       //line start with '#'
+            while (elemCh != '\n') {
+                elemCh = fgetc(inFile);
+            }
+            lineno++;
+            continue;
+        }
         else if (isdigit(elemCh) || elemCh == '.') {    //number constant
             int dotCount = 0;
             while (isdigit(elemCh) || elemCh == '.') {  //did not chect dot count, assume this is correct
