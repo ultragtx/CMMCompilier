@@ -22,7 +22,7 @@ int main(){
     mean = sum / temp;
 	printf("[%d]\n", mean);
  
-    if(mean >= 60){
+    if(mean <= 60){
          mean = mean - 60;
          printf("the score of student number %d is %d higher than 60.\n", stu_number, mean);
     }

@@ -70,7 +70,7 @@ int lexOne(int *type, int *intValue, char **strValue) {
             if (dotCount) {     //float or double
                 double doubleConst = atof(lexBuff);
                 // TODO: get double constant
-                printf("Float number [%lf] should not appear!", doubleConst);
+                //printf("Float number [%lf] should not appear!", doubleConst);
                 return LexReturnType_OK;
             }
             else {              //integer
